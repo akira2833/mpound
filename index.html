@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HANTAL 3D Automotive Electro-Deposition</title>
+    <!-- Google Fonts: Inter Thin 100, Medium 500, Bold 700 & JetBrains Mono -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,500&family=JetBrains+Mono:wght@400;500;700;800&display=swap" rel="stylesheet">
+    <!-- Three.js, OrbitControls & ColladaLoader CDN for SketchUp Models -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/ColladaLoader.js"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="main-scroll-container">
+        <!-- ==========================================================================
+             SECTION 1: HERO VIEWPORT & ARCHITECTURAL SPLIT TITLE
+             ========================================================================== -->
+        <section class="hero-section" id="start">
+            <!-- Three.js 3D Viewport Area -->
+            <div class="viewport-3d" id="viewport3D">
+                <div id="threeCanvasContainer"></div>
+                <div class="glass-observation-overlay">
+                    <div class="glass-hud-corners">
+                        <span class="hud-c top-left"></span>
+                        <span class="hud-c top-right"></span>
+                        <span class="hud-c bottom-left"></span>
+                        <span class="hud-c bottom-right"></span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Top Left Title: HANTAL & Modern 3-Line Editorial Typography -->
+            <div class="editorial-title-hantal-container">
+                <h1 class="title-line title-hantal">HANTAL</h1>
+                <div class="hantal-sub-typography">
+                    <p class="hero-editorial-statement">
+                        <span>Transforming how industries experience</span>
+                        <span>electro-coating with HANTAL advanced</span>
+                        <span>automotive electro-deposition systems.</span>
+                    </p>
+                </div>
+            </div>
+
+            <!-- Top Right Title: COATING & Cybernetic Glass History Timeline -->
+            <div class="editorial-title-coating-container">
+                <h1 class="title-line title-coating">COATING</h1>
+                
+                <!-- Mobile Trigger Floating Button (우측 센터 HISTORY 버튼) -->
+                <button class="mobile-history-trigger-btn" id="btnMobileHistory" aria-label="Open Timeline">
+                    <span class="trigger-label">HISTORY</span>
+                </button>
+
+                <!-- Glass HUD Cybernetic Timeline Panel (연혁) -->
+                <div class="cyber-history-timeline-panel" id="mobileTimelinePanel">
+                    <button class="timeline-close-btn" id="btnCloseMobileHistory" aria-label="Close Timeline">CLOSE</button>
+
+                    <div class="timeline-vertical-stem">
+                        <div class="stem-glow-line"></div>
+                    </div>
+
+                    <div class="history-card-item left" style="top: 0px;">
+                        <div class="node-diamond cyan"></div>
+                        <div class="card-glass-box">
+                            <span class="card-tag">SYSTEM://</span>
+                            <h3 class="card-year">2018</h3>
+                            <p class="card-desc">HANTAL R&D Lab Established, Cathodic Electro-Chemistry Init</p>
+                        </div>
+                        <span class="step-index-num">01 / 05</span>
+                    </div>
+
+                    <div class="history-card-item right" style="top: 85px;">
+                        <div class="node-diamond cyan"></div>
+                        <div class="card-glass-box">
+                            <span class="card-tag">PATENT://</span>
+                            <h3 class="card-year">2020</h3>
+                            <p class="card-desc">Automotive ED Dip Cell & Multi-Layer Anti-Corrosion Patent</p>
+                        </div>
+                        <span class="step-index-num">02 / 05</span>
+                    </div>
+
+                    <div class="history-card-item left active-glow" style="top: 170px;">
+                        <div class="node-diamond green"></div>
+                        <div class="card-glass-box">
+                            <span class="card-tag">DEPLOY://</span>
+                            <h3 class="card-year">2022</h3>
+                            <p class="card-desc">Smart Factory Gantry Kinematics & 480V Cathodic System</p>
+                        </div>
+                        <span class="step-index-num">03 / 05</span>
+                    </div>
+
+                    <div class="history-card-item right" style="top: 255px;">
+                        <div class="node-diamond cyan"></div>
+                        <div class="card-glass-box">
+                            <span class="card-tag">INNOVATE://</span>
+                            <h3 class="card-year">2024</h3>
+                            <p class="card-desc">Next-Gen Realtime 3D Telemetry HUD & AI Coating Control</p>
+                        </div>
+                        <span class="step-index-num">04 / 05</span>
+                    </div>
+
+                    <div class="history-card-item left" style="top: 340px;">
+                        <div class="node-diamond green"></div>
+                        <div class="card-glass-box">
+                            <span class="card-tag">GLOBAL://</span>
+                            <h3 class="card-year">2026 ●</h3>
+                            <p class="card-desc">HANTAL Electro-Deposition Global Automotive Standard</p>
+                        </div>
+                        <span class="step-index-num">05 / 05</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bottom Right Controls: 3D Camera Zoom In / Zoom Out -->
+            <div class="editorial-controls-bottom">
+                <button class="minimal-btn" id="btnZoomIn">ZOOM IN +</button>
+                <button class="minimal-btn" id="btnZoomOut">ZOOM OUT −</button>
+            </div>
+
+            <!-- Minimalist Center Line Timeline -->
+            <nav class="center-line-timeline">
+                <div class="timeline-thin-line"></div>
+                <div class="timeline-nodes-inline">
+                    <div class="inline-node active" id="stepNode1">
+                        <span class="dot-indicator">●</span>
+                        <span class="node-label-text">ALIGN</span>
+                    </div>
+                    <div class="inline-node" id="stepNode2">
+                        <span class="dot-indicator">●</span>
+                        <span class="node-label-text">CHECK</span>
+                    </div>
+                    <div class="inline-node" id="stepNode3">
+                        <span class="dot-indicator">●</span>
+                        <span class="node-label-text">PASS</span>
+                    </div>
+                    <div class="inline-node" id="stepNode4">
+                        <span class="dot-indicator">●</span>
+                        <span class="node-label-text">DENSITY</span>
+                    </div>
+                    <div class="inline-node" id="stepNode5">
+                        <span class="dot-indicator">●</span>
+                        <span class="node-label-text">COMPLETE</span>
+                    </div>
+                </div>
+            </nav>
+
+            <!-- HANTAL Logo Splash Screen -->
+            <div id="centerPlayOverlay" class="splash-overlay">
+                <div class="splash-logo-container">
+                    <div class="splash-logo-text">HANTAL</div>
+                    <div class="splash-sub-text">ELECTRO-DEPOSITION COATING</div>
+                    <div class="splash-line"></div>
+                </div>
+            </div>
+
+            <!-- Saw-Tooth Geometric Teeth Divider -->
+            <div class="sawtooth-teeth-wrapper">
+                <svg viewBox="0 0 1440 120" preserveAspectRatio="none">
+                    <path d="M 0,120 L 0,60 L 144,0 L 288,60 L 432,0 L 576,60 L 720,0 L 864,60 L 1008,0 L 1152,60 L 1296,0 L 1440,60 L 1440,120 Z" fill="#ffffff"/>
+                </svg>
+            </div>
+        </section>
+
+        <!-- ==========================================================================
+             SECTION 2: HORIZONTAL CARD SCROLL SNAP FEATURES
+             ========================================================================== -->
+        <section class="features-scroll-section" id="features">
+            <div class="features-header-wrapper">
+                <span class="section-tag">[ FEATURES ]</span>
+                <h2 class="features-headline">
+                    HANTAL ED coating simplifies industrial processes, strengthens anti-corrosion, and sharpens a product's UX.
+                </h2>
+            </div>
+
+            <!-- Horizontal Scroll Track -->
+            <div class="horizontal-cards-track">
+                <!-- Card 1 -->
+                <div class="horizontal-card">
+                    <header class="card-header-title">Device-based Cathodic Control</header>
+                    <div class="card-media-box">
+                        <div class="card-badge">[VERIFIED]</div>
+                        <div class="card-icon-svg">⚡</div>
+                    </div>
+                    <p class="card-description-text">Give production lines a method of coating they already trust–such as cathodic voltage regulation–and provide a more polished finish.</p>
+                </div>
+
+                <!-- Card 2 -->
+                <div class="horizontal-card">
+                    <header class="card-header-title">Deep Tank Submersion</header>
+                    <div class="card-media-box">
+                        <div class="orbit-tags">
+                            <span>4.8m DIP</span>
+                            <span>100% COATED</span>
+                        </div>
+                    </div>
+                    <p class="card-description-text">Enable 100% full body panel immersion into 4.8m deep royal cobalt blue paint bath for complete cathodic protection.</p>
+                </div>
+
+                <!-- Card 3 -->
+                <div class="horizontal-card">
+                    <header class="card-header-title">High-Gloss Anti-Corrosion</header>
+                    <div class="card-media-box">
+                        <div class="cubes-row">
+                            <div class="c-box"></div>
+                            <div class="c-box"></div>
+                            <div class="c-box"></div>
+                        </div>
+                    </div>
+                    <p class="card-description-text">Ensure structural metal safety through electro-coat barrier with features such as salt-spray resistance, while maintaining high-gloss finish.</p>
+                </div>
+
+                <!-- Card 4 -->
+                <div class="horizontal-card">
+                    <header class="card-header-title">Developer-Friendly Integration</header>
+                    <div class="card-media-box">
+                        <div class="code-pill">npx hantal-coat --stage 3d-loop</div>
+                    </div>
+                    <p class="card-description-text">Include the smart 3D conveyor kinematics easily in your factory stack for simple, drop-in automated dipping loop.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==========================================================================
+             SECTION 3: ACCORDION SECURITY & QUALITY LIST
+             ========================================================================== -->
+        <section class="security-list-section" id="security">
+            <div class="security-header-wrapper">
+                <span class="section-tag">[ QUALITY & SECURITY ]</span>
+                <h2 class="security-headline">What makes HANTAL electro-deposition secure & reliable?</h2>
+                <p class="security-intro-p">Proven to be much more effective than traditional spraying methods. They draw on advanced cathodic electro-chemistry frameworks offering key industrial advantages:</p>
+            </div>
+
+            <!-- Numbered Accordion List -->
+            <div class="accordion-list-wrapper">
+                <!-- Accordion 01 -->
+                <div class="accordion-item active">
+                    <div class="accordion-header">
+                        <span class="item-num">[ 01 ]</span>
+                        <h3 class="item-title">Cathodic Voltage Uniformity</h3>
+                        <span class="item-arrow">▲</span>
+                    </div>
+                    <div class="accordion-content">
+                        <p>With HANTAL Cathodic Control, voltage density is evenly distributed across every millimeter of raw steel, eliminating thin spots or coating defects.</p>
+                    </div>
+                </div>
+
+                <!-- Accordion 02 -->
+                <div class="accordion-item">
+                    <div class="accordion-header">
+                        <span class="item-num">[ 02 ]</span>
+                        <h3 class="item-title">Zero Uncoated Cavities</h3>
+                        <span class="item-arrow">▼</span>
+                    </div>
+                    <div class="accordion-content">
+                        <p>100% fluid submersion guarantees that interior hollow door panels, window frames, and hidden crevices receive full electro-deposition paint coverage.</p>
+                    </div>
+                </div>
+
+                <!-- Accordion 03 -->
+                <div class="accordion-item">
+                    <div class="accordion-header">
+                        <span class="item-num">[ 03 ]</span>
+                        <h3 class="item-title">Automated Conveyor Kinematics</h3>
+                        <span class="item-arrow">▼</span>
+                    </div>
+                    <div class="accordion-content">
+                        <p>4-stage conveyor choreography controls slow entry, fast immersion, and smooth emergence at 2/3 screen position for optimal drip removal.</p>
+                    </div>
+                </div>
+
+                <!-- Accordion 04 -->
+                <div class="accordion-item">
+                    <div class="accordion-header">
+                        <span class="item-num">[ 04 ]</span>
+                        <h3 class="item-title">Realtime Telemetry Scanning</h3>
+                        <span class="item-arrow">▼</span>
+                    </div>
+                    <div class="accordion-content">
+                        <p>Continuous density scanning tracks coating progress from 94.1% to 100% complete pass in real time.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ==========================================================================
+                 SECTION 4: SCROLL TEXT REVEAL SECTION
+                 ========================================================================== -->
+            <section class="text-reveal-section" id="manifesto">
+                <div class="text-reveal-wrapper">
+                    <span class="section-tag">[ MANIFESTO ]</span>
+                    <p class="reveal-text" id="revealText">
+                        HANTAL Electro-Deposition Coating redefines automotive finishing standards with precision cathodic electro-chemistry. Every micro-layer is engineered for maximum anti-corrosion, structural durability, and high-gloss perfection across all body panels.
+                    </p>
+                </div>
+            </section>
+
+            <!-- Bottom Footer -->
+            <footer class="editorial-footer-bottom">
+                <span>© 2026 HANTAL AUTOMOTIVE LAB // ALL RIGHTS RESERVED</span>
+                <span>REFERENCING PASSKEYS.FOUNDATION SCROLL ENGINE</span>
+            </footer>
+        </section>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
