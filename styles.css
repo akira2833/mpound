@@ -466,7 +466,7 @@ p {
 /* Subtitle Statement (Left aligned in 3D Viewport - Linear Style Editorial) */
 .hero-editorial-statement-container {
     position: absolute;
-    top: 320px;
+    top: 370px;
     left: 25px;
     z-index: 20;
     pointer-events: none;
