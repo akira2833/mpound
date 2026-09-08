@@ -349,18 +349,18 @@ p {
 }
 
 .site-global-header .header-inner {
-    max-width: 1440px;
-    margin: 0 auto;
+    width: 100%;
+    max-width: none;
     height: 60px;
-    padding: 0 28px;
+    padding: 0 25px;
     display: flex;
     align-items: center;
 }
 
 @media (min-width: 768px) {
     .site-global-header .header-inner {
-        height: 52px;
-        padding: 0 40px;
+        height: 60px;
+        padding: 0 25px;
     }
 }
 
@@ -386,8 +386,8 @@ p {
 .header-nav-menu {
     display: none;
     align-items: center;
-    gap: 48px;
-    margin-left: 52px;
+    gap: 42px;
+    margin-left: 56px;
 }
 
 @media (min-width: 1024px) {
@@ -399,8 +399,8 @@ p {
 .header-nav-menu .nav-item {
     font-family: var(--font-graphik), var(--font-sans);
     font-size: 15px;
-    font-weight: 600;
-    color: rgba(255, 255, 255, 0.72);
+    font-weight: 300;
+    color: rgba(255, 255, 255, 0.75);
     text-decoration: none;
     letter-spacing: -0.01em;
     transition: color 0.2s ease;
@@ -444,7 +444,7 @@ p {
 .nav-contact-link {
     font-family: var(--font-graphik), var(--font-sans);
     font-size: 15px;
-    font-weight: 600;
+    font-weight: 300;
     color: #ffffff;
     text-decoration: none;
     display: inline-flex;
@@ -467,7 +467,7 @@ p {
 .hero-editorial-statement-container {
     position: absolute;
     top: 360px;
-    left: 40px;
+    left: 25px;
     z-index: 20;
     pointer-events: none;
 }
