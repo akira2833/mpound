@@ -352,7 +352,7 @@ p {
 
 .hantal-brand-logo {
     display: block;
-    height: clamp(32px, 3.2vw, 56px);
+    height: clamp(16px, 1.6vw, 28px);
     width: auto;
     object-fit: contain;
     filter: drop-shadow(0 4px 24px rgba(0, 0, 0, 0.75));
