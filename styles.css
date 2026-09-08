@@ -477,7 +477,7 @@ p {
     font-size: clamp(16.8px, 1.92vw, 43.2px);
     font-weight: 300;
     line-height: 1.25;
-    letter-spacing: -0.015em;
+    letter-spacing: 0.04em;
     text-wrap: pretty;
     color: #ffffff;
     text-shadow: 0 4px 30px rgba(0, 0, 0, 0.7);
@@ -494,6 +494,19 @@ p {
 .hero-editorial-statement strong {
     font-weight: 700;
     color: #ffffff;
+}
+
+.hero-editorial-subcaption {
+    font-family: var(--font-graphik);
+    font-size: calc(clamp(16.8px, 1.92vw, 43.2px) * 0.5);
+    font-weight: 300;
+    line-height: 1.4;
+    letter-spacing: 0.02em;
+    color: #ffffff;
+    opacity: 0.5;
+    margin-top: 10px;
+    text-shadow: 0 2px 12px rgba(0, 0, 0, 0.6);
+    max-width: 45vw;
 }
 
 /* ==========================================================================
