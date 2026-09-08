@@ -4,7 +4,7 @@
 @font-face {
     font-family: 'Söhne';
     src: url('fonts/soehne-buch.woff2') format('woff2'),
-         url('https://cdn.openai.com/common/fonts/soehne/soehne-buch.woff2') format('woff2');
+        url('https://cdn.openai.com/common/fonts/soehne/soehne-buch.woff2') format('woff2');
     font-weight: 300;
     font-style: normal;
     font-display: swap;
@@ -13,7 +13,7 @@
 @font-face {
     font-family: 'Söhne';
     src: url('fonts/soehne-buch.woff2') format('woff2'),
-         url('https://cdn.openai.com/common/fonts/soehne/soehne-buch.woff2') format('woff2');
+        url('https://cdn.openai.com/common/fonts/soehne/soehne-buch.woff2') format('woff2');
     font-weight: 400;
     font-style: normal;
     font-display: swap;
@@ -22,7 +22,7 @@
 @font-face {
     font-family: 'Söhne';
     src: url('fonts/soehne-kraftig.woff2') format('woff2'),
-         url('https://cdn.openai.com/common/fonts/soehne/soehne-kraftig.woff2') format('woff2');
+        url('https://cdn.openai.com/common/fonts/soehne/soehne-kraftig.woff2') format('woff2');
     font-weight: 500;
     font-style: normal;
     font-display: swap;
@@ -31,7 +31,7 @@
 @font-face {
     font-family: 'Söhne';
     src: url('fonts/soehne-halbfett.woff2') format('woff2'),
-         url('https://cdn.openai.com/common/fonts/soehne/soehne-halbfett.woff2') format('woff2');
+        url('https://cdn.openai.com/common/fonts/soehne/soehne-halbfett.woff2') format('woff2');
     font-weight: 600;
     font-style: normal;
     font-display: swap;
@@ -40,7 +40,7 @@
 @font-face {
     font-family: 'Söhne';
     src: url('fonts/soehne-halbfett.woff2') format('woff2'),
-         url('https://cdn.openai.com/common/fonts/soehne/soehne-halbfett.woff2') format('woff2');
+        url('https://cdn.openai.com/common/fonts/soehne/soehne-halbfett.woff2') format('woff2');
     font-weight: 700;
     font-style: normal;
     font-display: swap;
@@ -49,7 +49,7 @@
 @font-face {
     font-family: 'Söhne Mono';
     src: url('fonts/soehne-mono-buch.woff2') format('woff2'),
-         url('https://cdn.openai.com/common/fonts/soehne/soehne-mono-buch.woff2') format('woff2');
+        url('https://cdn.openai.com/common/fonts/soehne/soehne-mono-buch.woff2') format('woff2');
     font-weight: 400;
     font-style: normal;
     font-display: swap;
@@ -58,7 +58,7 @@
 @font-face {
     font-family: 'Söhne Mono';
     src: url('fonts/soehne-mono-buch.woff2') format('woff2'),
-         url('https://cdn.openai.com/common/fonts/soehne/soehne-mono-buch.woff2') format('woff2');
+        url('https://cdn.openai.com/common/fonts/soehne/soehne-mono-buch.woff2') format('woff2');
     font-weight: 700;
     font-style: normal;
     font-display: swap;
@@ -69,8 +69,26 @@
    ========================================================================== */
 @font-face {
     font-family: 'Graphik';
+    src: url('fonts/GraphikThinItalic.woff') format('woff'),
+        url('https://fonts.cdnfonts.com/s/27112/GraphikThinItalic.woff') format('woff');
+    font-weight: 100;
+    font-style: italic;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Graphik Thin';
+    src: url('fonts/GraphikThinItalic.woff') format('woff'),
+        url('https://fonts.cdnfonts.com/s/27112/GraphikThinItalic.woff') format('woff');
+    font-weight: 100;
+    font-style: italic;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Graphik';
     src: url('fonts/GraphikLight.woff') format('woff'),
-         url('https://fonts.cdnfonts.com/s/27112/GraphikLight.woff') format('woff');
+        url('https://fonts.cdnfonts.com/s/27112/GraphikLight.woff') format('woff');
     font-weight: 300;
     font-style: normal;
     font-display: swap;
@@ -79,7 +97,7 @@
 @font-face {
     font-family: 'Graphik';
     src: url('fonts/GraphikRegular.woff') format('woff'),
-         url('https://fonts.cdnfonts.com/s/27112/GraphikRegular.woff') format('woff');
+        url('https://fonts.cdnfonts.com/s/27112/GraphikRegular.woff') format('woff');
     font-weight: 400;
     font-style: normal;
     font-display: swap;
@@ -88,7 +106,7 @@
 @font-face {
     font-family: 'Graphik';
     src: url('fonts/GraphikBold.woff') format('woff'),
-         url('https://fonts.cdnfonts.com/s/27112/GraphikBold.woff') format('woff');
+        url('https://fonts.cdnfonts.com/s/27112/GraphikBold.woff') format('woff');
     font-weight: 700;
     font-style: normal;
     font-display: swap;
@@ -105,8 +123,10 @@
     --font-h2: clamp(1.625rem, 1.35rem + 1.2vw, 2.25rem);
     --font-h3: clamp(1.25rem, 1.15rem + 0.5vw, 1.5rem);
     --font-body: clamp(1rem, 0.95rem + 0.25vw, 1.125rem);
-    --font-meta: 0.75rem; /* 12px 정밀 계측/인덱스 */
-    --font-badge: 0.6875rem; /* 11px 레이블 */
+    --font-meta: 0.75rem;
+    /* 12px 정밀 계측/인덱스 */
+    --font-badge: 0.6875rem;
+    /* 11px 레이블 */
     --font-metric-lg: clamp(2rem, 1.5rem + 2vw, 3rem);
 
     /* 3. 정밀 산업용 고정폭 숫자 (Tabular Figures) & 합자 최적화 */
@@ -153,7 +173,9 @@ body {
 }
 
 /* 대형 헤드라인 기본 설정: 시각적 밀도와 안정감을 위해 음수 자간(-0.025em) 및 균형 줄바꿈 */
-h1, h2, h3 {
+h1,
+h2,
+h3 {
     text-align: left;
     text-wrap: balance;
     letter-spacing: -0.025em;
@@ -257,8 +279,7 @@ p {
             transparent 30%,
             transparent 65%,
             rgba(56, 189, 248, 0.04) 75%,
-            rgba(255, 255, 255, 0.06) 100%
-        );
+            rgba(255, 255, 255, 0.06) 100%);
     backdrop-filter: contrast(1.04) brightness(0.96);
     pointer-events: none;
     z-index: 5;
@@ -273,14 +294,12 @@ p {
     left: -50%;
     width: 200%;
     height: 200%;
-    background: linear-gradient(
-        45deg,
-        transparent 42%,
-        rgba(255, 255, 255, 0.08) 46%,
-        rgba(255, 255, 255, 0.15) 50%,
-        rgba(255, 255, 255, 0.08) 54%,
-        transparent 58%
-    );
+    background: linear-gradient(45deg,
+            transparent 42%,
+            rgba(255, 255, 255, 0.08) 46%,
+            rgba(255, 255, 255, 0.15) 50%,
+            rgba(255, 255, 255, 0.08) 54%,
+            transparent 58%);
     pointer-events: none;
 }
 
@@ -466,7 +485,7 @@ p {
 /* Subtitle Statement (Left aligned in 3D Viewport - Linear Style Editorial) */
 .hero-editorial-statement-container {
     position: absolute;
-    top: 370px;
+    top: 480px;
     left: 25px;
     z-index: 20;
     pointer-events: none;
@@ -498,13 +517,14 @@ p {
 }
 
 .hero-editorial-subcaption {
-    font-family: var(--font-graphik);
+    font-family: 'Graphik Thin', var(--font-graphik);
     font-size: clamp(14px, 1.0vw, 17px);
-    font-weight: 400;
+    font-weight: 100;
+    font-style: italic;
     line-height: 1.45;
-    letter-spacing: -0.012em;
+    letter-spacing: 0.1em;
     text-align: left;
-    color: rgba(255, 255, 255, 0.55);
+    color: rgba(255, 255, 255, 0.25);
     margin-top: 16px;
     text-shadow: 0 2px 10px rgba(0, 0, 0, 0.6);
     max-width: 45vw;
@@ -582,13 +602,14 @@ p {
     position: relative;
     width: 160px;
     padding: 8px 10px;
-    background: rgba(15, 23, 42, 0.15); /* Ultra Transparent Glass */
+    background: rgba(15, 23, 42, 0.15);
+    /* Ultra Transparent Glass */
     backdrop-filter: blur(8px) saturate(140%);
     -webkit-backdrop-filter: blur(8px) saturate(140%);
     border: 1px solid rgba(255, 255, 255, 0.18);
     border-radius: 6px;
     text-align: left;
-    box-shadow: 
+    box-shadow:
         0 4px 20px 0 rgba(0, 0, 0, 0.25),
         inset 0 1px 1px 0 rgba(255, 255, 255, 0.25),
         inset 0 -1px 1px 0 rgba(0, 0, 0, 0.2);
@@ -604,26 +625,30 @@ p {
     left: -100%;
     width: 60%;
     height: 100%;
-    background: linear-gradient(
-        90deg, 
-        transparent 0%, 
-        rgba(255, 255, 255, 0.25) 50%, 
-        transparent 100%
-    );
+    background: linear-gradient(90deg,
+            transparent 0%,
+            rgba(255, 255, 255, 0.25) 50%,
+            transparent 100%);
     transform: skewX(-25deg);
     animation: glassShineReflection 6s infinite;
 }
 
 @keyframes glassShineReflection {
-    0% { left: -100%; }
-    20%, 100% { left: 200%; }
+    0% {
+        left: -100%;
+    }
+
+    20%,
+    100% {
+        left: 200%;
+    }
 }
 
 .history-card-item:hover .card-glass-box {
     background: rgba(15, 23, 42, 0.35);
     border-color: rgba(56, 189, 248, 0.6);
     transform: translateY(-2px);
-    box-shadow: 
+    box-shadow:
         0 8px 25px 0 rgba(56, 189, 248, 0.2),
         inset 0 1px 2px 0 rgba(255, 255, 255, 0.4);
 }
@@ -1406,7 +1431,7 @@ p {
         backdrop-filter: blur(16px);
         -webkit-backdrop-filter: blur(16px);
         border: 1.5px solid rgba(56, 189, 248, 0.6);
-        box-shadow: 
+        box-shadow:
             0 8px 25px rgba(0, 0, 0, 0.6),
             0 0 15px rgba(56, 189, 248, 0.4),
             inset 0 1px 2px rgba(255, 255, 255, 0.3);
@@ -1466,12 +1491,15 @@ p {
         opacity: 0 !important;
         pointer-events: none !important;
         transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1) !important;
-        scrollbar-width: none !important; /* Hide Firefox scrollbar */
-        -ms-overflow-style: none !important;  /* Hide IE/Edge scrollbar */
+        scrollbar-width: none !important;
+        /* Hide Firefox scrollbar */
+        -ms-overflow-style: none !important;
+        /* Hide IE/Edge scrollbar */
     }
 
     .cyber-history-timeline-panel::-webkit-scrollbar {
-        display: none !important; /* Hide Chrome/Safari scrollbar */
+        display: none !important;
+        /* Hide Chrome/Safari scrollbar */
         width: 0 !important;
         height: 0 !important;
     }
@@ -1602,7 +1630,8 @@ p {
     .card-glass-box {
         width: 100%;
         padding: 8px 10px;
-        background: rgba(15, 23, 42, 0.88); /* High contrast dark glass */
+        background: rgba(15, 23, 42, 0.88);
+        /* High contrast dark glass */
         backdrop-filter: blur(12px);
         -webkit-backdrop-filter: blur(12px);
         border: 1px solid rgba(56, 189, 248, 0.4);
