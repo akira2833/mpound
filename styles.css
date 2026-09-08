@@ -64,10 +64,41 @@
     font-display: swap;
 }
 
+/* ==========================================================================
+   Commercial Type - Graphik Typography Definition
+   ========================================================================== */
+@font-face {
+    font-family: 'Graphik';
+    src: url('fonts/GraphikLight.woff') format('woff'),
+         url('https://fonts.cdnfonts.com/s/27112/GraphikLight.woff') format('woff');
+    font-weight: 300;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Graphik';
+    src: url('fonts/GraphikRegular.woff') format('woff'),
+         url('https://fonts.cdnfonts.com/s/27112/GraphikRegular.woff') format('woff');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Graphik';
+    src: url('fonts/GraphikBold.woff') format('woff'),
+         url('https://fonts.cdnfonts.com/s/27112/GraphikBold.woff') format('woff');
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+}
+
 :root {
-    /* 1. 폰트 패밀리 스택 (Klim Type Foundry Söhne & Söhne Mono) */
+    /* 1. 폰트 패밀리 스택 (Klim Type Foundry Söhne & Söhne Mono, Commercial Type Graphik) */
     --font-sans: 'Söhne', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Inter', sans-serif;
     --font-mono: 'Söhne Mono', 'JetBrains Mono', ui-monospace, SFMono-Regular, monospace;
+    --font-graphik: 'Graphik', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 
     /* 2. 유동형 반응형 타이포그래피 스케일: clamp() 시스템 (375px ~ 1440px) */
     --font-h1: clamp(2rem, 1.2rem + 3.5vw, 3.5rem);
@@ -330,7 +361,7 @@ p {
 }
 
 .hero-editorial-statement {
-    font-family: var(--font-sans);
+    font-family: var(--font-graphik);
     font-size: clamp(16.8px, 1.92vw, 43.2px);
     font-weight: 300;
     line-height: 1.25;
