@@ -335,13 +335,33 @@ p {
     text-shadow: 0 6px 40px rgba(0, 0, 0, 0.8);
 }
 
-/* TOP LEFT TITLE: HANTAL (Inter Medium 500) */
+/* TOP LEFT TITLE: HANTAL BRAND LOGO */
 .editorial-title-hantal-container {
     position: absolute;
-    top: 15px;
-    left: 15px;
+    top: 20px;
+    left: 25px;
     z-index: 20;
     pointer-events: none;
+}
+
+.hantal-logo-link {
+    display: inline-block;
+    pointer-events: auto;
+    text-decoration: none;
+}
+
+.hantal-brand-logo {
+    display: block;
+    height: clamp(32px, 3.2vw, 56px);
+    width: auto;
+    object-fit: contain;
+    filter: drop-shadow(0 4px 24px rgba(0, 0, 0, 0.75));
+    transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.hantal-logo-link:hover .hantal-brand-logo {
+    opacity: 0.9;
+    transform: scale(1.02);
 }
 
 .title-hantal {
