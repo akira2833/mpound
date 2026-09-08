@@ -5,6 +5,15 @@
     font-family: 'Söhne';
     src: url('fonts/soehne-buch.woff2') format('woff2'),
          url('https://cdn.openai.com/common/fonts/soehne/soehne-buch.woff2') format('woff2');
+    font-weight: 300;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Söhne';
+    src: url('fonts/soehne-buch.woff2') format('woff2'),
+         url('https://cdn.openai.com/common/fonts/soehne/soehne-buch.woff2') format('woff2');
     font-weight: 400;
     font-style: normal;
     font-display: swap;
@@ -323,7 +332,7 @@ p {
 .hero-editorial-statement {
     font-family: var(--font-sans);
     font-size: clamp(16.8px, 1.92vw, 43.2px);
-    font-weight: 500;
+    font-weight: 300;
     line-height: 1.25;
     letter-spacing: -0.015em;
     text-wrap: pretty;
@@ -336,6 +345,12 @@ p {
 .hero-editorial-statement span {
     display: block;
     white-space: nowrap;
+}
+
+.hero-editorial-statement b,
+.hero-editorial-statement strong {
+    font-weight: 700;
+    color: #ffffff;
 }
 
 /* TOP RIGHT TITLE: COATING (Moved to Top-Right!) */
