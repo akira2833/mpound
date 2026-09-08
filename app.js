@@ -184,6 +184,14 @@ let clippingPlaneAbove, clippingPlaneBelow;
 let keySpotLight, rimSpotLight;
 let factoryBackgroundGroup;
 
+// 4-Stage Electro-Coating Sequence: Door -> Random 1 -> Random 2 -> Door
+const CANDIDATE_ITEMS = ['heart', 'teddy', 'chair', 'toyCar'];
+const shuffledCandidates = [...CANDIDATE_ITEMS].sort(() => Math.random() - 0.5);
+const CARRIER_SEQUENCE = ['door', shuffledCandidates[0], shuffledCandidates[1], 'door'];
+let activeCarrierKey = 'door';
+let carrierItems = {};
+console.log('Automotive Electro-Deposition Dynamic Carrier Sequence:', CARRIER_SEQUENCE);
+
 // Strategy B Extras: Electro-Magic Particle Flux & Live Telemetry HUD
 let sparkLinesGroup, shockwaveRipples = [], holoCalloutGroup, cathodicParticleGroup;
 let telemetryTextSprite;
@@ -226,10 +234,15 @@ function initThreeJS() {
     controls.enableDamping = true;
     controls.dampingFactor = 0.05;
     controls.enableZoom = false;
+    controls.minDistance = 8.0;
+    controls.maxDistance = 50.0;
     controls.autoRotate = true;
     controls.autoRotateSpeed = 1.2;
     controls.maxPolarAngle = Math.PI / 2 + 0.15;
     controls.target.set(0, -0.4, 0);
+    controls.addEventListener('start', () => {
+        targetCameraDistance = null;
+    });
     controls.update();
 
     // 4. DRAMATIC AUTOMOTIVE STUDIO SPOTLIGHTING SETUP
@@ -552,6 +565,7 @@ function updateCyberHoloDoor(timeSec) {
 
 // -------------------------------------------------------------
 // HIGH-TECH AUTOMATED FACTORY BACKGROUND ARCHITECTURE 🏭
+// Fully grounded architectural enclosure with authentic lighting mounts & conduit routing
 // -------------------------------------------------------------
 function buildFactoryArchitecturalBackground() {
     factoryBackgroundGroup = new THREE.Group();
@@ -559,65 +573,123 @@ function buildFactoryArchitecturalBackground() {
 
     const steelMat = new THREE.MeshStandardMaterial({
         color: 0x334155,
-        metalness: 0.8,
+        metalness: 0.85,
         roughness: 0.3
     });
 
     const whiteTrussMat = new THREE.MeshStandardMaterial({
         color: 0xe2e8f0,
-        metalness: 0.3,
-        roughness: 0.2
+        metalness: 0.4,
+        roughness: 0.25
     });
 
-    const cyanTubeLightMat = new THREE.MeshBasicMaterial({
-        color: 0x38bdf8
+    const darkWallMat = new THREE.MeshStandardMaterial({
+        color: 0x0f141d,
+        metalness: 0.25,
+        roughness: 0.85
     });
 
-    const trussLength = 60;
-    const topBarGeo = new THREE.BoxGeometry(trussLength, 0.25, 0.25);
+    const darkAccentMat = new THREE.MeshStandardMaterial({
+        color: 0x1e293b,
+        metalness: 0.5,
+        roughness: 0.5
+    });
+
+    // 1. FACTORY ARCHITECTURAL BACK WALL & STRUCTURAL SEAMS
+    // Prevents floating in void by providing a realistic industrial envelope
+    const wallGeo = new THREE.PlaneGeometry(80, 26);
+    const backWall = new THREE.Mesh(wallGeo, darkWallMat);
+    backWall.position.set(0, 5.2, -1.8);
+    backWall.receiveShadow = true;
+    factoryBackgroundGroup.add(backWall);
+
+    // Architectural wall division panels (horizontal & vertical seam battens)
+    for (let y = -2.0; y <= 12.0; y += 3.5) {
+        const seamHGeo = new THREE.BoxGeometry(80, 0.08, 0.06);
+        const seamH = new THREE.Mesh(seamHGeo, darkAccentMat);
+        seamH.position.set(0, y, -1.76);
+        factoryBackgroundGroup.add(seamH);
+    }
+    for (let x = -30; x <= 30; x += 10) {
+        const seamVGeo = new THREE.BoxGeometry(0.1, 26, 0.06);
+        const seamV = new THREE.Mesh(seamVGeo, darkAccentMat);
+        seamV.position.set(x, 5.2, -1.76);
+        factoryBackgroundGroup.add(seamV);
+    }
+
+    // 2. HEAVY INDUSTRIAL ROOF TRUSS & VERTICAL MAIN COLUMNS
+    const trussLength = 64;
+    const topBarGeo = new THREE.BoxGeometry(trussLength, 0.3, 0.3);
     
+    // Top & Bottom Chord Beams
     const topBeam1 = new THREE.Mesh(topBarGeo, whiteTrussMat);
-    topBeam1.position.set(0, 11.5, 0);
+    topBeam1.position.set(0, 11.6, 0);
     factoryBackgroundGroup.add(topBeam1);
 
     const topBeam2 = new THREE.Mesh(topBarGeo, whiteTrussMat);
     topBeam2.position.set(0, 10.2, 0);
     factoryBackgroundGroup.add(topBeam2);
 
-    for (let x = -28; x <= 28; x += 4) {
+    // Truss Diagonal Webbing
+    for (let x = -30; x <= 30; x += 3.5) {
         const braceGeo = new THREE.BoxGeometry(0.12, 1.8, 0.12);
         const braceLeft = new THREE.Mesh(braceGeo, steelMat);
-        braceLeft.position.set(x + 1.0, 10.85, 0);
+        braceLeft.position.set(x + 0.8, 10.9, 0);
         braceLeft.rotation.z = Math.PI / 4;
         factoryBackgroundGroup.add(braceLeft);
 
         const braceRight = new THREE.Mesh(braceGeo, steelMat);
-        braceRight.position.set(x + 1.0, 10.85, 0);
+        braceRight.position.set(x + 0.8, 10.9, 0);
         braceRight.rotation.z = -Math.PI / 4;
         factoryBackgroundGroup.add(braceRight);
     }
 
-    const colGeo = new THREE.BoxGeometry(0.8, 16, 0.8);
+    // Massive Floor-to-Ceiling Steel Support Columns (x = -22, +22)
+    const colHeight = 18.5;
+    const colGeo = new THREE.BoxGeometry(0.9, colHeight, 0.9);
+    
     const colLeft = new THREE.Mesh(colGeo, steelMat);
-    colLeft.position.set(-22, 2.8, 0);
+    colLeft.position.set(-22, 3.25, 0);
     factoryBackgroundGroup.add(colLeft);
 
     const colRight = new THREE.Mesh(colGeo, steelMat);
-    colRight.position.set(22, 2.8, 0);
+    colRight.position.set(22, 3.25, 0);
     factoryBackgroundGroup.add(colRight);
 
-    const pipeGeo = new THREE.CylinderGeometry(0.35, 0.35, trussLength, 24);
+    // Column Base Plates anchored to floor
+    const basePlateGeo = new THREE.BoxGeometry(1.6, 0.25, 1.6);
+    const baseL = new THREE.Mesh(basePlateGeo, steelMat);
+    baseL.position.set(-22, -3.8 + 0.12, 0);
+    factoryBackgroundGroup.add(baseL);
+
+    const baseR = new THREE.Mesh(basePlateGeo, steelMat);
+    baseR.position.set(22, -3.8 + 0.12, 0);
+    factoryBackgroundGroup.add(baseR);
+
+    // Column-to-Truss Heavy Gusset Joint Brackets
+    const gussetGeo = new THREE.BoxGeometry(1.2, 1.2, 0.95);
+    const gussetL = new THREE.Mesh(gussetGeo, steelMat);
+    gussetL.position.set(-22, 10.9, 0);
+    factoryBackgroundGroup.add(gussetL);
+
+    const gussetR = new THREE.Mesh(gussetGeo, steelMat);
+    gussetR.position.set(22, 10.9, 0);
+    factoryBackgroundGroup.add(gussetR);
+
+    // 3. HVAC VENTILATION DUCT & RIGID CLEVIS DROP-HANGER SUPPORTS
+    const pipeGeo = new THREE.CylinderGeometry(0.35, 0.35, trussLength - 6, 24);
     pipeGeo.rotateZ(Math.PI / 2);
     const pipeMat = new THREE.MeshStandardMaterial({
         color: 0x64748b,
         metalness: 0.9,
-        roughness: 0.15
+        roughness: 0.2
     });
 
     const duct1 = new THREE.Mesh(pipeGeo, pipeMat);
     duct1.position.set(0, 8.8, -1.2);
     factoryBackgroundGroup.add(duct1);
 
+    // Reinforcing Duct Coupling Rings
     for (let x = -26; x <= 26; x += 6) {
         const ringGeo = new THREE.TorusGeometry(0.38, 0.04, 16, 32);
         const ringMat = new THREE.MeshStandardMaterial({ color: 0x38bdf8, metalness: 0.8 });
@@ -626,7 +698,47 @@ function buildFactoryArchitecturalBackground() {
         factoryBackgroundGroup.add(ringMesh);
     }
 
+    // Structural Hangers: Connects duct to upper truss so it does NOT float!
+    for (let x = -24; x <= 24; x += 8) {
+        // Horizontal Cantilever Arm from Truss (z=0) out to Duct (z=-1.2)
+        const armGeo = new THREE.BoxGeometry(0.12, 0.12, 1.25);
+        const armMesh = new THREE.Mesh(armGeo, steelMat);
+        armMesh.position.set(x, 10.2, -0.6);
+        factoryBackgroundGroup.add(armMesh);
+
+        // Vertical Threaded Drop Rod hanging from Arm down to Duct clamp
+        const rodGeo = new THREE.CylinderGeometry(0.02, 0.02, 1.4, 8);
+        const rodMesh = new THREE.Mesh(rodGeo, steelMat);
+        rodMesh.position.set(x, 9.5, -1.2);
+        factoryBackgroundGroup.add(rodMesh);
+
+        // Clevis Clamp around Duct
+        const clevisGeo = new THREE.TorusGeometry(0.40, 0.03, 12, 24, Math.PI);
+        clevisGeo.rotateZ(Math.PI);
+        const clevisMesh = new THREE.Mesh(clevisGeo, steelMat);
+        clevisMesh.position.set(x, 8.8, -1.2);
+        factoryBackgroundGroup.add(clevisMesh);
+    }
+
+    // Duct End Exhaust Wall Terminations (Elbows into wall)
+    const termGeo = new THREE.BoxGeometry(1.2, 1.2, 0.8);
+    const termL = new THREE.Mesh(termGeo, steelMat);
+    termL.position.set(-(trussLength - 6) / 2 - 0.4, 8.8, -1.4);
+    factoryBackgroundGroup.add(termL);
+
+    const termR = new THREE.Mesh(termGeo, steelMat);
+    termR.position.set((trussLength - 6) / 2 + 0.4, 8.8, -1.4);
+    factoryBackgroundGroup.add(termR);
+
+    // 4. WALL-MOUNTED HIGH-TECH CYAN GLOW TUBE FIXTURES
+    // Grounded to wall with continuous C-channel strut & electrical vertical conduits
+    const strutChannelGeo = new THREE.BoxGeometry(50, 0.16, 0.12);
+    const strutChannel = new THREE.Mesh(strutChannelGeo, steelMat);
+    strutChannel.position.set(0, 5.5, -1.72);
+    factoryBackgroundGroup.add(strutChannel);
+
     for (let x = -20; x <= 20; x += 10) {
+        // Glowing cyan tube
         const tubeGeo = new THREE.CylinderGeometry(0.08, 0.08, 4.5, 16);
         tubeGeo.rotateZ(Math.PI / 2);
         const glowTubeMat = new THREE.MeshStandardMaterial({
@@ -635,64 +747,106 @@ function buildFactoryArchitecturalBackground() {
             emissiveIntensity: 1.8
         });
         const tubeMesh = new THREE.Mesh(tubeGeo, glowTubeMat);
-        tubeMesh.position.set(x, 5.5, -1.5);
+        tubeMesh.position.set(x, 5.5, -1.55);
         factoryBackgroundGroup.add(tubeMesh);
 
-        // Tube light source casting cyan light downward
+        // Downward soft area light
         const tubeLight = new THREE.PointLight(0x38bdf8, 0.6, 12, 2);
-        tubeLight.position.set(x, 5.2, -1.0);
+        tubeLight.position.set(x, 5.2, -1.2);
         factoryBackgroundGroup.add(tubeLight);
 
-        const bracketGeo = new THREE.BoxGeometry(4.8, 0.18, 0.12);
-        const bracketMesh = new THREE.Mesh(bracketGeo, steelMat);
-        bracketMesh.position.set(x, 5.5, -1.6);
-        factoryBackgroundGroup.add(bracketMesh);
+        // Heavy Fixture Mounting Backplate firmly attached to strut channel
+        const fixtureBackGeo = new THREE.BoxGeometry(4.8, 0.22, 0.14);
+        const fixtureBack = new THREE.Mesh(fixtureBackGeo, steelMat);
+        fixtureBack.position.set(x, 5.5, -1.65);
+        factoryBackgroundGroup.add(fixtureBack);
+
+        // Left & Right Clamping End Caps
+        const capGeo = new THREE.BoxGeometry(0.18, 0.28, 0.22);
+        const capL = new THREE.Mesh(capGeo, steelMat);
+        capL.position.set(x - 2.3, 5.5, -1.55);
+        factoryBackgroundGroup.add(capL);
+
+        const capR = new THREE.Mesh(capGeo, steelMat);
+        capR.position.set(x + 2.3, 5.5, -1.55);
+        factoryBackgroundGroup.add(capR);
+
+        // Vertical Electrical Conduit Pipe connecting from ceiling truss (y=10.2) down to fixture
+        const conduitGeo = new THREE.CylinderGeometry(0.025, 0.025, 4.7, 8);
+        const conduit = new THREE.Mesh(conduitGeo, steelMat);
+        conduit.position.set(x + 2.2, 7.85, -1.68);
+        factoryBackgroundGroup.add(conduit);
+
+        // Conduit Junction Box at top connection
+        const cBoxGeo = new THREE.BoxGeometry(0.15, 0.15, 0.12);
+        const cBox = new THREE.Mesh(cBoxGeo, steelMat);
+        cBox.position.set(x + 2.2, 10.2, -1.68);
+        factoryBackgroundGroup.add(cBox);
     }
 
+    // 5. INDUSTRIAL PENDANT CONE LAMPS (Directly Anchored to Truss Chord)
+    // Aligned to z=0 so they connect 100% seamlessly to the overhead truss!
     for (let x = -18; x <= 18; x += 12) {
-        const lampShadeGeo = new THREE.CylinderGeometry(0.6, 1.2, 0.6, 24, 1, true);
-        const lampMat = new THREE.MeshStandardMaterial({ color: 0x1e293b, side: THREE.DoubleSide, metalness: 0.8 });
+        // Ceiling Junction Box mounted under truss chord
+        const jBoxGeo = new THREE.BoxGeometry(0.35, 0.15, 0.35);
+        const jBox = new THREE.Mesh(jBoxGeo, steelMat);
+        jBox.position.set(x, 10.12, 0);
+        factoryBackgroundGroup.add(jBox);
+
+        // Rigid Steel Drop Stem connecting Junction Box to Lamp Cap
+        const stemHeight = 0.55;
+        const stemGeo = new THREE.CylinderGeometry(0.025, 0.025, stemHeight, 8);
+        const stemMesh = new THREE.Mesh(stemGeo, steelMat);
+        stemMesh.position.set(x, 9.80, 0);
+        factoryBackgroundGroup.add(stemMesh);
+
+        // Lamp Shade Collar / Socket Cap
+        const collarGeo = new THREE.CylinderGeometry(0.22, 0.22, 0.12, 16);
+        const collarMesh = new THREE.Mesh(collarGeo, steelMat);
+        collarMesh.position.set(x, 9.54, 0);
+        factoryBackgroundGroup.add(collarMesh);
+
+        // Pendant Lamp Metal Shade
+        const lampShadeGeo = new THREE.CylinderGeometry(0.3, 1.2, 0.6, 24, 1, true);
+        const lampMat = new THREE.MeshStandardMaterial({ color: 0x1e293b, side: THREE.DoubleSide, metalness: 0.85, roughness: 0.3 });
         const lampMesh = new THREE.Mesh(lampShadeGeo, lampMat);
-        lampMesh.position.set(x, 9.6, -0.5);
+        lampMesh.position.set(x, 9.24, 0);
         factoryBackgroundGroup.add(lampMesh);
 
-        // Emissive warm bulb inside the lamp shade
-        const bulbGeo = new THREE.SphereGeometry(0.22, 16, 16);
+        // Warm Glowing Light Bulb inside Shade
+        const bulbGeo = new THREE.SphereGeometry(0.20, 16, 16);
         const bulbMat = new THREE.MeshStandardMaterial({
             color: 0xfff4e0,
             emissive: 0xfbbf24,
             emissiveIntensity: 2.5
         });
         const bulbMesh = new THREE.Mesh(bulbGeo, bulbMat);
-        bulbMesh.position.set(x, 9.35, -0.5);
+        bulbMesh.position.set(x, 9.05, 0);
         factoryBackgroundGroup.add(bulbMesh);
 
-        // Warm PointLight from each lamp
+        // Warm Area Downlight from Lamp
         const lampLight = new THREE.PointLight(0xfbbf24, 1.2, 18, 2);
-        lampLight.position.set(x, 9.3, -0.5);
+        lampLight.position.set(x, 8.95, 0);
         lampLight.castShadow = false;
         factoryBackgroundGroup.add(lampLight);
-
-        const cordGeo = new THREE.CylinderGeometry(0.02, 0.02, 0.8, 8);
-        const cordMesh = new THREE.Mesh(cordGeo, steelMat);
-        cordMesh.position.set(x, 10.0, -0.5);
-        factoryBackgroundGroup.add(cordMesh);
     }
 
     scene.add(factoryBackgroundGroup);
 }
 
 // -------------------------------------------------------------
-// INFINITE DARK SLATE STUDIO FLOOR & METALLIC GREY OVERHEAD CRANE BEAM
+// INFINITE DARK SLATE STUDIO FLOOR & STRUCTURALLY INTEGRATED OVERHEAD CRANE GANTRY
+// Fully cross-braced to ceiling framework with track end-stops
 // -------------------------------------------------------------
 function buildStudioEnvironment() {
-    const floorGeo = new THREE.PlaneGeometry(140, 140);
+    // 1. Studio Floor
+    const floorGeo = new THREE.PlaneGeometry(160, 160);
     floorGeo.rotateX(-Math.PI / 2);
 
     const floorMat = new THREE.MeshStandardMaterial({
-        color: 0x18181b,
-        roughness: 0.75,
-        metalness: 0.2
+        color: 0x14161d,
+        roughness: 0.78,
+        metalness: 0.22
     });
 
     const floorMesh = new THREE.Mesh(floorGeo, floorMat);
@@ -700,8 +854,10 @@ function buildStudioEnvironment() {
     floorMesh.receiveShadow = true;
     scene.add(floorMesh);
 
+    // 2. Floor Guide Tracks with Safety Buffer End-Stops & Anchor Plates
     const trackMat = new THREE.MeshStandardMaterial({ color: 0x475569, metalness: 0.85, roughness: 0.2 });
-    const trackGeo = new THREE.BoxGeometry(32, 0.12, 0.22);
+    const trackLength = 32;
+    const trackGeo = new THREE.BoxGeometry(trackLength, 0.12, 0.22);
     
     const trackFront = new THREE.Mesh(trackGeo, trackMat);
     trackFront.position.set(0, TANK_BASE_Y + 0.06, 2.6);
@@ -711,7 +867,27 @@ function buildStudioEnvironment() {
     trackBack.position.set(0, TANK_BASE_Y + 0.06, -2.6);
     scene.add(trackBack);
 
-    const beamGeo = new THREE.BoxGeometry(36, 0.28, 0.35);
+    // Heavy Industrial End-Stop Bumpers on Floor Tracks (x = -16, +16)
+    const bumperMat = new THREE.MeshStandardMaterial({ color: 0xf59e0b, metalness: 0.4, roughness: 0.4 });
+    const bumperBaseMat = new THREE.MeshStandardMaterial({ color: 0x1e293b, metalness: 0.85, roughness: 0.3 });
+    [-16, 16].forEach(xPos => {
+        [2.6, -2.6].forEach(zPos => {
+            // Anchor Base Plate
+            const bPlateGeo = new THREE.BoxGeometry(0.5, 0.08, 0.5);
+            const bPlate = new THREE.Mesh(bPlateGeo, bumperBaseMat);
+            bPlate.position.set(xPos, TANK_BASE_Y + 0.04, zPos);
+            scene.add(bPlate);
+
+            // High-visibility Hazard Yellow Stopper Block
+            const bBlockGeo = new THREE.BoxGeometry(0.3, 0.32, 0.35);
+            const bBlock = new THREE.Mesh(bBlockGeo, bumperMat);
+            bBlock.position.set(xPos, TANK_BASE_Y + 0.20, zPos);
+            scene.add(bBlock);
+        });
+    });
+
+    // 3. Overhead Crane Conveyor Gantry Beam
+    const beamGeo = new THREE.BoxGeometry(36, 0.35, 0.45);
     const beamMat = new THREE.MeshStandardMaterial({
         color: 0x475569,
         roughness: 0.25,
@@ -722,9 +898,17 @@ function buildStudioEnvironment() {
     conveyorBeamMesh.castShadow = true;
     scene.add(conveyorBeamMesh);
 
-    // Vertical Gantry Support Columns connecting Overhead Rail to Floor
+    // Gantry Rail End Bumpers
+    [-18, 18].forEach(endX => {
+        const rEndGeo = new THREE.BoxGeometry(0.3, 0.6, 0.55);
+        const rEnd = new THREE.Mesh(rEndGeo, bumperMat);
+        rEnd.position.set(endX, OVERHEAD_RAIL_Y, 0);
+        scene.add(rEnd);
+    });
+
+    // 4. Vertical Gantry Support Columns with Heavy Flanged Bases
     const pillarHeight = OVERHEAD_RAIL_Y - TANK_BASE_Y;
-    const gantryColGeo = new THREE.BoxGeometry(0.6, pillarHeight, 0.6);
+    const gantryColGeo = new THREE.BoxGeometry(0.7, pillarHeight, 0.7);
     
     const leftPillar = new THREE.Mesh(gantryColGeo, beamMat);
     leftPillar.position.set(-15, TANK_BASE_Y + pillarHeight / 2, 0);
@@ -736,8 +920,18 @@ function buildStudioEnvironment() {
     rightPillar.castShadow = true;
     scene.add(rightPillar);
 
-    // Diagonal Gantry Support Brackets connecting Pillars to Beam
-    const bracketGeo = new THREE.BoxGeometry(0.2, 3.2, 0.2);
+    // Column Base Anchor Flanges on floor
+    const gantryBaseGeo = new THREE.BoxGeometry(1.4, 0.25, 1.4);
+    const gBaseL = new THREE.Mesh(gantryBaseGeo, beamMat);
+    gBaseL.position.set(-15, TANK_BASE_Y + 0.12, 0);
+    scene.add(gBaseL);
+
+    const gBaseR = new THREE.Mesh(gantryBaseGeo, beamMat);
+    gBaseR.position.set(15, TANK_BASE_Y + 0.12, 0);
+    scene.add(gBaseR);
+
+    // Diagonal Gantry Gusset Brackets connecting Pillars to Conveyor Beam
+    const bracketGeo = new THREE.BoxGeometry(0.22, 3.2, 0.22);
     
     const leftBrace = new THREE.Mesh(bracketGeo, beamMat);
     leftBrace.position.set(-13.8, OVERHEAD_RAIL_Y - 1.0, 0);
@@ -749,6 +943,60 @@ function buildStudioEnvironment() {
     rightBrace.rotation.z = -Math.PI / 4;
     scene.add(rightBrace);
 
+    // 5. CRITICAL STRUCTURAL TIE-IN: OVERHEAD CROSS GIRDERS (Front Z=0 to Back Z=-14)
+    // Fully connects the front crane rail to the factory building framework!
+    [-15, 15].forEach(xAnchor => {
+        // Transverse I-beam crossing from z=0 to z=-14
+        const crossLength = 14.0;
+        const crossGeo = new THREE.BoxGeometry(0.4, 0.45, crossLength);
+        const crossBeam = new THREE.Mesh(crossGeo, beamMat);
+        crossBeam.position.set(xAnchor, OVERHEAD_RAIL_Y + 0.15, -crossLength / 2);
+        crossBeam.castShadow = true;
+        scene.add(crossBeam);
+
+        // Angled Gusset Tie-in connecting Cross Beam to Vertical Column
+        const tieGeo = new THREE.BoxGeometry(0.2, 0.2, 2.4);
+        tieGeo.rotateX(Math.PI / 4);
+        const tieMesh = new THREE.Mesh(tieGeo, beamMat);
+        tieMesh.position.set(xAnchor, OVERHEAD_RAIL_Y - 0.7, -0.8);
+        scene.add(tieMesh);
+    });
+
+    // 6. INDUSTRIAL HIGH-BAY LED FLOODLIGHT FIXTURES MOUNTED TO GANTRY CORNERS
+    // Physically gives a source to the studio spotlighting!
+    const fixtureMat = new THREE.MeshStandardMaterial({ color: 0x1e293b, metalness: 0.85, roughness: 0.2 });
+    const lensMat = new THREE.MeshStandardMaterial({
+        color: 0xffffff,
+        emissive: 0xffffff,
+        emissiveIntensity: 2.2
+    });
+
+    [-15, 15].forEach((xPos, idx) => {
+        const floodlightGroup = new THREE.Group();
+        floodlightGroup.position.set(xPos, OVERHEAD_RAIL_Y + 0.6, 0.5);
+
+        // Mounting Bracket Yoke
+        const yokeGeo = new THREE.BoxGeometry(0.1, 0.45, 0.6);
+        const yoke = new THREE.Mesh(yokeGeo, fixtureMat);
+        floodlightGroup.add(yoke);
+
+        // Lamp Housing Body angled downward toward tank center
+        const housingGeo = new THREE.BoxGeometry(0.8, 0.4, 0.5);
+        const housing = new THREE.Mesh(housingGeo, fixtureMat);
+        housing.rotation.x = 0.45;
+        housing.rotation.y = idx === 0 ? 0.35 : -0.35;
+        floodlightGroup.add(housing);
+
+        // Glowing Glass Front Lens
+        const lensGeo = new THREE.PlaneGeometry(0.7, 0.32);
+        const lens = new THREE.Mesh(lensGeo, lensMat);
+        lens.position.set(0, 0, 0.26);
+        housing.add(lens);
+
+        scene.add(floodlightGroup);
+    });
+
+    // 7. Trolley Hoist, Wire Rope & Immersion Clamp
     const trolleyGeo = new THREE.BoxGeometry(1.2, 0.3, 0.6);
     const trolleyMat = new THREE.MeshStandardMaterial({ color: 0x475569, roughness: 0.25, metalness: 0.85 });
     trolleyMesh = new THREE.Mesh(trolleyGeo, trolleyMat);
@@ -977,12 +1225,11 @@ function build3DCarDoorAssembly() {
     });
 
     // =========================================================
-    // FULL 3D PROCEDURAL CAR DOOR ASSEMBLY (no .dae dependency)
+    // 1. PROCEDURAL 3D CAR DOOR ASSEMBLY
     // =========================================================
     function buildProceduralDoor(baseMaterial) {
         const doorAssembly = new THREE.Group();
 
-        // --- Outer Door Panel (curved shape with window cutout) ---
         const outerShape = new THREE.Shape();
         outerShape.moveTo(-2.0, -1.4);
         outerShape.lineTo(2.0, -1.4);
@@ -1010,7 +1257,6 @@ function build3DCarDoorAssembly() {
         outerPanel.receiveShadow = true;
         doorAssembly.add(outerPanel);
 
-        // --- Inner Door Panel (recessed lower section) ---
         const innerShape = new THREE.Shape();
         innerShape.moveTo(-1.6, -1.1);
         innerShape.lineTo(1.6, -1.1);
@@ -1029,7 +1275,6 @@ function build3DCarDoorAssembly() {
         innerPanel.castShadow = true;
         doorAssembly.add(innerPanel);
 
-        // --- Chrome Window Frame ---
         const frameMat = new THREE.MeshStandardMaterial({
             color: 0x94a3b8, metalness: 0.95, roughness: 0.05
         });
@@ -1045,7 +1290,6 @@ function build3DCarDoorAssembly() {
             doorAssembly.add(m);
         });
 
-        // --- Door Handle ---
         const hBase = new THREE.Mesh(new THREE.BoxGeometry(0.35, 0.08, 0.08), frameMat.clone());
         hBase.position.set(0.9, -0.15, 0.22);
         doorAssembly.add(hBase);
@@ -1053,7 +1297,6 @@ function build3DCarDoorAssembly() {
         hGrip.position.set(0.9, -0.15, 0.28);
         doorAssembly.add(hGrip);
 
-        // --- Side Mirror ---
         const mArm = new THREE.Mesh(new THREE.BoxGeometry(0.08, 0.06, 0.4), darkTrimMat.clone());
         mArm.position.set(-1.7, 0.55, 0.38);
         doorAssembly.add(mArm);
@@ -1062,19 +1305,16 @@ function build3DCarDoorAssembly() {
         mHead.scale.set(0.6, 0.8, 1.0);
         doorAssembly.add(mHead);
 
-        // --- Reinforcement Ribs (visible from inside) ---
         for (let i = 0; i < 3; i++) {
             const rib = new THREE.Mesh(new THREE.BoxGeometry(3.2, 0.04, 0.08), baseMaterial.clone());
             rib.position.set(0, -0.8 + i * 0.5, -0.26);
             doorAssembly.add(rib);
         }
 
-        // --- Bottom Trim ---
         const btm = new THREE.Mesh(new THREE.BoxGeometry(3.8, 0.06, 0.42), darkTrimMat.clone());
         btm.position.set(0, -1.12, 0);
         doorAssembly.add(btm);
 
-        // --- Hinge Plates ---
         for (const y of [0.8, -0.6]) {
             const hinge = new THREE.Mesh(new THREE.BoxGeometry(0.15, 0.25, 0.10), frameMat.clone());
             hinge.position.set(-2.0, y, 0);
@@ -1088,14 +1328,344 @@ function build3DCarDoorAssembly() {
         return doorAssembly;
     }
 
-    rawSteelDoorMesh = buildProceduralDoor(globalRawSteelMat);
-    coatedDoorMesh = buildProceduralDoor(globalCoatedPaintMat);
+    // =========================================================
+    // 2. PROCEDURAL 3D VOLUMETRIC HEART SHAPE 💖
+    // =========================================================
+    function buildProceduralHeart(baseMaterial) {
+        const group = new THREE.Group();
+        const x = 0, y = 0;
+        const heartShape = new THREE.Shape();
+        heartShape.moveTo(x, y + 0.45);
+        heartShape.bezierCurveTo(x, y + 0.85, x - 0.45, y + 1.25, x - 0.95, y + 1.25);
+        heartShape.bezierCurveTo(x - 1.55, y + 1.25, x - 1.55, y + 0.65, x - 1.55, y + 0.65);
+        heartShape.bezierCurveTo(x - 1.55, y + 0.15, x - 1.05, y - 0.55, x, y - 1.35);
+        heartShape.bezierCurveTo(x + 1.05, y - 0.55, x + 1.55, y + 0.15, x + 1.55, y + 0.65);
+        heartShape.bezierCurveTo(x + 1.55, y + 0.65, x + 1.55, y + 1.25, x + 0.95, y + 1.25);
+        heartShape.bezierCurveTo(x + 0.45, y + 1.25, x, y + 0.85, x, y + 0.45);
 
-    doorGroup.add(rawSteelDoorMesh);
-    doorGroup.add(coatedDoorMesh);
+        const heartGeo = new THREE.ExtrudeGeometry(heartShape, {
+            depth: 0.65,
+            bevelEnabled: true,
+            bevelSegments: 6,
+            steps: 2,
+            bevelSize: 0.18,
+            bevelThickness: 0.18
+        });
+        heartGeo.center();
+        const heartMesh = new THREE.Mesh(heartGeo, baseMaterial.clone());
+        heartMesh.castShadow = true;
+        heartMesh.receiveShadow = true;
+        group.add(heartMesh);
+
+        // Top Hoist Hanging Loop
+        const ringGeo = new THREE.TorusGeometry(0.18, 0.04, 12, 24);
+        const ringMesh = new THREE.Mesh(ringGeo, baseMaterial.clone());
+        ringMesh.position.set(0, 1.25, 0);
+        group.add(ringMesh);
+
+        // 50% Scaled Compact Size
+        group.scale.set(0.45, 0.45, 0.45);
+        return group;
+    }
 
     // =========================================================
-    // LOAD REAL 3D COLLADA MODEL (.dae) FROM FILE
+    // 3. PROCEDURAL 3D CHUBBY TEDDY BEAR 🧸
+    // =========================================================
+    function buildProceduralTeddy(baseMaterial) {
+        const group = new THREE.Group();
+
+        // Head
+        const headGeo = new THREE.SphereGeometry(0.72, 20, 20);
+        const head = new THREE.Mesh(headGeo, baseMaterial.clone());
+        head.position.set(0, 0.25, 0);
+        head.scale.set(1.0, 0.92, 0.9);
+        head.castShadow = true;
+        group.add(head);
+
+        // Ears
+        [-0.58, 0.58].forEach(x => {
+            const earGeo = new THREE.SphereGeometry(0.28, 16, 16);
+            const ear = new THREE.Mesh(earGeo, baseMaterial.clone());
+            ear.position.set(x, 0.82, 0);
+            ear.scale.set(1.0, 1.0, 0.45);
+            ear.castShadow = true;
+            group.add(ear);
+        });
+
+        // Muzzle
+        const muzzleGeo = new THREE.SphereGeometry(0.32, 16, 16);
+        const muzzle = new THREE.Mesh(muzzleGeo, baseMaterial.clone());
+        muzzle.position.set(0, 0.1, 0.55);
+        muzzle.scale.set(1.0, 0.75, 0.85);
+        group.add(muzzle);
+
+        // Cute Nose
+        const noseGeo = new THREE.SphereGeometry(0.09, 12, 12);
+        const nose = new THREE.Mesh(noseGeo, darkTrimMat.clone());
+        nose.position.set(0, 0.2, 0.8);
+        group.add(nose);
+
+        // Eyes
+        [-0.22, 0.22].forEach(x => {
+            const eyeGeo = new THREE.SphereGeometry(0.065, 10, 10);
+            const eye = new THREE.Mesh(eyeGeo, darkTrimMat.clone());
+            eye.position.set(x, 0.36, 0.65);
+            group.add(eye);
+        });
+
+        // Chubby Body
+        const bodyGeo = new THREE.SphereGeometry(0.95, 20, 20);
+        const body = new THREE.Mesh(bodyGeo, baseMaterial.clone());
+        body.position.set(0, -1.0, 0);
+        body.scale.set(1.0, 1.15, 0.95);
+        body.castShadow = true;
+        group.add(body);
+
+        // Arms
+        [-0.95, 0.95].forEach((x, idx) => {
+            const armGeo = new THREE.CylinderGeometry(0.22, 0.16, 0.85, 16);
+            const arm = new THREE.Mesh(armGeo, baseMaterial.clone());
+            arm.position.set(x, -0.85, 0.18);
+            arm.rotation.z = idx === 0 ? 0.55 : -0.55;
+            arm.rotation.x = -0.3;
+            arm.castShadow = true;
+            group.add(arm);
+        });
+
+        // Legs
+        [-0.52, 0.52].forEach(x => {
+            const legGeo = new THREE.CylinderGeometry(0.25, 0.28, 0.75, 16);
+            const leg = new THREE.Mesh(legGeo, baseMaterial.clone());
+            leg.position.set(x, -1.9, 0.2);
+            leg.rotation.x = -0.35;
+            leg.castShadow = true;
+            group.add(leg);
+        });
+
+        // Top Hoist Hanging Loop
+        const ringGeo = new THREE.TorusGeometry(0.18, 0.04, 12, 24);
+        const ringMesh = new THREE.Mesh(ringGeo, baseMaterial.clone());
+        ringMesh.position.set(0, 1.05, 0);
+        group.add(ringMesh);
+
+        // 50% Scaled Compact Size
+        group.scale.set(0.425, 0.425, 0.425);
+        return group;
+    }
+
+    // =========================================================
+    // 4. PROCEDURAL 3D MODERN INDUSTRIAL CHAIR 🪑
+    // =========================================================
+    function buildProceduralChair(baseMaterial) {
+        const group = new THREE.Group();
+
+        // Curved Seat
+        const seatGeo = new THREE.BoxGeometry(1.9, 0.14, 1.8);
+        const seat = new THREE.Mesh(seatGeo, baseMaterial.clone());
+        seat.position.set(0, -0.2, 0);
+        seat.castShadow = true;
+        group.add(seat);
+
+        // Ergonomic Curved Backrest
+        const backGeo = new THREE.BoxGeometry(1.8, 1.4, 0.12);
+        const back = new THREE.Mesh(backGeo, baseMaterial.clone());
+        back.position.set(0, 0.8, -0.8);
+        back.castShadow = true;
+        group.add(back);
+
+        // Backrest Support Tubes
+        [-0.65, 0.65].forEach(x => {
+            const postGeo = new THREE.CylinderGeometry(0.04, 0.04, 1.0, 12);
+            const post = new THREE.Mesh(postGeo, baseMaterial.clone());
+            post.position.set(x, 0.3, -0.8);
+            group.add(post);
+        });
+
+        // 4 Steel Legs
+        const legCoords = [
+            [-0.8, -0.85, 0.75],
+            [0.8, -0.85, 0.75],
+            [-0.8, -0.85, -0.75],
+            [0.8, -0.85, -0.75]
+        ];
+        legCoords.forEach(([x, y, z]) => {
+            const legGeo = new THREE.CylinderGeometry(0.045, 0.035, 1.35, 12);
+            const leg = new THREE.Mesh(legGeo, baseMaterial.clone());
+            leg.position.set(x, y, z);
+            leg.castShadow = true;
+            group.add(leg);
+        });
+
+        // Horizontal Leg Reinforcement Bars
+        const strHGeo = new THREE.BoxGeometry(1.6, 0.04, 0.04);
+        const str1 = new THREE.Mesh(strHGeo, baseMaterial.clone());
+        str1.position.set(0, -0.95, 0.75);
+        group.add(str1);
+
+        const str2 = new THREE.Mesh(strHGeo, baseMaterial.clone());
+        str2.position.set(0, -0.95, -0.75);
+        group.add(str2);
+
+        // Top Hoist Hanging Loop
+        const ringGeo = new THREE.TorusGeometry(0.18, 0.04, 12, 24);
+        const ringMesh = new THREE.Mesh(ringGeo, baseMaterial.clone());
+        ringMesh.position.set(0, 1.6, -0.8);
+        group.add(ringMesh);
+
+        // 50% Scaled Compact Size
+        group.scale.set(0.425, 0.425, 0.425);
+        return group;
+    }
+
+    // =========================================================
+    // 5. PROCEDURAL 3D MINI TOY CAR 🚙
+    // =========================================================
+    function buildProceduralToyCar(baseMaterial) {
+        const group = new THREE.Group();
+
+        // Main Lower Body
+        const bodyGeo = new THREE.BoxGeometry(2.8, 0.7, 1.5);
+        const body = new THREE.Mesh(bodyGeo, baseMaterial.clone());
+        body.position.set(0, 0, 0);
+        body.castShadow = true;
+        group.add(body);
+
+        // Rounded Front Nose and Rear Bumper
+        const noseGeo = new THREE.CylinderGeometry(0.35, 0.35, 1.5, 16);
+        noseGeo.rotateX(Math.PI / 2);
+        const nose = new THREE.Mesh(noseGeo, baseMaterial.clone());
+        nose.position.set(1.35, -0.05, 0);
+        group.add(nose);
+
+        const tail = new THREE.Mesh(noseGeo, baseMaterial.clone());
+        tail.position.set(-1.35, -0.05, 0);
+        group.add(tail);
+
+        // Bubble Cabin Roof
+        const cabinGeo = new THREE.BoxGeometry(1.5, 0.65, 1.35);
+        const cabin = new THREE.Mesh(cabinGeo, baseMaterial.clone());
+        cabin.position.set(-0.1, 0.6, 0);
+        cabin.castShadow = true;
+        group.add(cabin);
+
+        // Windshield and Windows
+        const frontGlass = new THREE.Mesh(new THREE.BoxGeometry(0.08, 0.45, 1.25), darkTrimMat.clone());
+        frontGlass.position.set(0.65, 0.55, 0);
+        frontGlass.rotation.z = -0.35;
+        group.add(frontGlass);
+
+        const rearGlass = new THREE.Mesh(new THREE.BoxGeometry(0.08, 0.45, 1.25), darkTrimMat.clone());
+        rearGlass.position.set(-0.85, 0.55, 0);
+        rearGlass.rotation.z = 0.35;
+        group.add(rearGlass);
+
+        // 4 Chunky Wheels
+        const tireMat = new THREE.MeshStandardMaterial({ color: 0x18181b, roughness: 0.8 });
+        const wheelPositions = [
+            [0.85, -0.35, 0.82],
+            [-0.85, -0.35, 0.82],
+            [0.85, -0.35, -0.82],
+            [-0.85, -0.35, -0.82]
+        ];
+        wheelPositions.forEach(([wx, wy, wz]) => {
+            const wheelGroup = new THREE.Group();
+            wheelGroup.position.set(wx, wy, wz);
+
+            const tireGeo = new THREE.CylinderGeometry(0.34, 0.34, 0.22, 16);
+            tireGeo.rotateX(Math.PI / 2);
+            const tire = new THREE.Mesh(tireGeo, tireMat);
+            tire.castShadow = true;
+            wheelGroup.add(tire);
+
+            const hubGeo = new THREE.CylinderGeometry(0.18, 0.18, 0.24, 12);
+            hubGeo.rotateX(Math.PI / 2);
+            const hub = new THREE.Mesh(hubGeo, baseMaterial.clone());
+            wheelGroup.add(hub);
+
+            group.add(wheelGroup);
+        });
+
+        // Glowing Yellow Headlights
+        const hlGeo = new THREE.SphereGeometry(0.13, 12, 12);
+        const hlMat = new THREE.MeshStandardMaterial({ color: 0xfef08a, emissive: 0xfef08a, emissiveIntensity: 1.2 });
+        [-0.45, 0.45].forEach(z => {
+            const hl = new THREE.Mesh(hlGeo, hlMat);
+            hl.position.set(1.42, 0.12, z);
+            group.add(hl);
+        });
+
+        // Top Hoist Hanging Loop on Roof
+        const ringGeo = new THREE.TorusGeometry(0.18, 0.04, 12, 24);
+        const ringMesh = new THREE.Mesh(ringGeo, baseMaterial.clone());
+        ringMesh.position.set(-0.1, 1.05, 0);
+        group.add(ringMesh);
+
+        // 50% Scaled Compact Size
+        group.scale.set(0.45, 0.45, 0.45);
+        return group;
+    }
+
+    // =========================================================
+    // BUILD ALL 5 CARRIER OBJECTS (Door + 4 Random Candidates)
+    // =========================================================
+    // 1. Car Door
+    rawSteelDoorMesh = buildProceduralDoor(globalRawSteelMat);
+    coatedDoorMesh = buildProceduralDoor(globalCoatedPaintMat);
+    const doorHolder = new THREE.Group();
+    doorHolder.add(rawSteelDoorMesh);
+    doorHolder.add(coatedDoorMesh);
+    doorGroup.add(doorHolder);
+    carrierItems.door = { group: doorHolder, rawMesh: rawSteelDoorMesh, coatedMesh: coatedDoorMesh, name: 'AUTO CAR DOOR' };
+
+    // 2. Heart 💖 (50% Scaled)
+    const heartRaw = buildProceduralHeart(globalRawSteelMat);
+    const heartCoated = buildProceduralHeart(globalCoatedPaintMat);
+    const heartHolder = new THREE.Group();
+    heartHolder.add(heartRaw);
+    heartHolder.add(heartCoated);
+    heartHolder.position.y = 0.25;
+    heartHolder.visible = false;
+    doorGroup.add(heartHolder);
+    carrierItems.heart = { group: heartHolder, rawMesh: heartRaw, coatedMesh: heartCoated, name: 'METALLIC HEART' };
+
+    // 3. Teddy Bear 🧸 (50% Scaled)
+    const teddyRaw = buildProceduralTeddy(globalRawSteelMat);
+    const teddyCoated = buildProceduralTeddy(globalCoatedPaintMat);
+    const teddyHolder = new THREE.Group();
+    teddyHolder.add(teddyRaw);
+    teddyHolder.add(teddyCoated);
+    teddyHolder.position.y = 0.35;
+    teddyHolder.visible = false;
+    doorGroup.add(teddyHolder);
+    carrierItems.teddy = { group: teddyHolder, rawMesh: teddyRaw, coatedMesh: teddyCoated, name: 'PRECISION TEDDY' };
+
+    // 4. Modern Chair 🪑 (50% Scaled)
+    const chairRaw = buildProceduralChair(globalRawSteelMat);
+    const chairCoated = buildProceduralChair(globalCoatedPaintMat);
+    const chairHolder = new THREE.Group();
+    chairHolder.add(chairRaw);
+    chairHolder.add(chairCoated);
+    chairHolder.position.y = 0.15;
+    chairHolder.visible = false;
+    doorGroup.add(chairHolder);
+    carrierItems.chair = { group: chairHolder, rawMesh: chairRaw, coatedMesh: chairCoated, name: 'MODERN CHAIR' };
+
+    // 5. Toy Car 🚙 (50% Scaled)
+    const toyCarRaw = buildProceduralToyCar(globalRawSteelMat);
+    const toyCarCoated = buildProceduralToyCar(globalCoatedPaintMat);
+    const toyCarHolder = new THREE.Group();
+    toyCarHolder.add(toyCarRaw);
+    toyCarHolder.add(toyCarCoated);
+    toyCarHolder.position.y = 0.32;
+    toyCarHolder.visible = false;
+    doorGroup.add(toyCarHolder);
+    carrierItems.toyCar = { group: toyCarHolder, rawMesh: toyCarRaw, coatedMesh: toyCarCoated, name: 'MINI TOY CAR' };
+
+    // Set initial active item
+    switchActiveCarrierItem(CARRIER_SEQUENCE[0]);
+
+    // =========================================================
+    // LOAD REAL 3D COLLADA MODEL (.dae) FROM FILE (Optional Upgrade)
     // =========================================================
     if (typeof THREE.ColladaLoader !== 'undefined') {
         const loader = new THREE.ColladaLoader();
@@ -1107,7 +1677,6 @@ function build3DCarDoorAssembly() {
                     sketchupScene.scale.set(0.048, 0.048, 0.048);
                     sketchupScene.rotation.x = -Math.PI / 2;
 
-                    // Centering
                     const box = new THREE.Box3().setFromObject(sketchupScene);
                     const center = box.getCenter(new THREE.Vector3());
                     sketchupScene.position.set(-center.x, -center.y, -center.z);
@@ -1115,7 +1684,6 @@ function build3DCarDoorAssembly() {
                     const wrapperGroup = new THREE.Group();
                     wrapperGroup.add(sketchupScene);
 
-                    // Raw Steel Group
                     const rawGroup = wrapperGroup.clone(true);
                     rawGroup.traverse((child) => {
                         if (child && child.isMesh) {
@@ -1125,7 +1693,6 @@ function build3DCarDoorAssembly() {
                         }
                     });
 
-                    // Coated Paint Group
                     const coatedGroup = wrapperGroup.clone(true);
                     coatedGroup.traverse((child) => {
                         if (child && child.isMesh) {
@@ -1135,32 +1702,31 @@ function build3DCarDoorAssembly() {
                         }
                     });
 
-                    // Swap out procedural meshes with real 3D DAE model
-                    doorGroup.remove(rawSteelDoorMesh);
-                    doorGroup.remove(coatedDoorMesh);
+                    doorHolder.remove(rawSteelDoorMesh);
+                    doorHolder.remove(coatedDoorMesh);
 
                     rawSteelDoorMesh = rawGroup;
                     coatedDoorMesh = coatedGroup;
 
-                    doorGroup.add(rawSteelDoorMesh);
-                    doorGroup.add(coatedDoorMesh);
+                    doorHolder.add(rawSteelDoorMesh);
+                    doorHolder.add(coatedDoorMesh);
 
-                    console.log('Successfully loaded 3D DAE model: ./assets/sketchup_car_door/model.dae');
+                    carrierItems.door.rawMesh = rawSteelDoorMesh;
+                    carrierItems.door.coatedMesh = coatedDoorMesh;
+
+                    console.log('Successfully loaded 3D DAE car door model');
                 } catch (e) {
                     console.warn('Error processing loaded DAE model, keeping 3D procedural door:', e);
                 }
             },
             undefined,
             function (error) {
-                console.warn('Collada DAE load skipped/failed (e.g. file:// protocol restriction). Using high-quality 3D procedural car door model instead.', error);
+                console.warn('Collada DAE load skipped/failed. Using high-quality 3D procedural car door model instead.', error);
             }
         );
     }
 
-
-
-
-    // DIAGONAL HYDRAULIC TILTING PISTON ARMS ATTACHED TO DOOR RIG
+    // DIAGONAL HYDRAULIC TILTING PISTON ARMS ATTACHED TO RIG
     const pistonGeo = new THREE.CylinderGeometry(0.08, 0.08, 2.2, 16);
     
     const leftPiston = new THREE.Mesh(pistonGeo, hydraulicMat);
@@ -1174,6 +1740,47 @@ function build3DCarDoorAssembly() {
     doorGroup.add(rightPiston);
 
     scene.add(doorGroup);
+}
+
+// Switch active carrier item (Door, Heart, Teddy, Chair, ToyCar)
+function switchActiveCarrierItem(key) {
+    activeCarrierKey = key;
+    Object.keys(carrierItems).forEach(k => {
+        if (carrierItems[k] && carrierItems[k].group) {
+            carrierItems[k].group.visible = (k === key);
+        }
+    });
+    updateTelemetrySpriteText(key);
+}
+
+function updateTelemetrySpriteText(key) {
+    if (!telemetryTextSprite) return;
+    const item = carrierItems[key];
+    const itemName = item ? item.name : 'AUTO CAR DOOR';
+
+    const canvas = document.createElement('canvas');
+    canvas.width = 320;
+    canvas.height = 105;
+    const ctx = canvas.getContext('2d');
+    ctx.fillStyle = 'rgba(24, 24, 27, 0.92)';
+    ctx.fillRect(0, 0, 320, 105);
+    ctx.strokeStyle = '#38bdf8';
+    ctx.lineWidth = 3;
+    ctx.strokeRect(2, 2, 316, 101);
+    ctx.font = 'bold 14px "Söhne Mono", "JetBrains Mono", monospace';
+    ctx.fillStyle = '#38bdf8';
+    ctx.fillText(`⚡ ED BATCH: ${itemName}`, 14, 30);
+    ctx.fillStyle = '#ffffff';
+    ctx.fillText('🌡️ TEMP: 28.5°C | pH: 6.25', 14, 58);
+    ctx.fillStyle = '#cbd5e1';
+    ctx.fillText('📐 COAT FILM: 22.5μm PASS', 14, 86);
+
+    const newTex = new THREE.CanvasTexture(canvas);
+    if (telemetryTextSprite.material.map) {
+        telemetryTextSprite.material.map.dispose();
+    }
+    telemetryTextSprite.material.map = newTex;
+    telemetryTextSprite.material.needsUpdate = true;
 }
 
 // -------------------------------------------------------------
@@ -1347,31 +1954,42 @@ function start3DProcessAnimation() {
     state.startTime = -1; // Signal: set from next renderLoop frame
 }
 
-let targetCameraPos = null;
+let targetCameraDistance = null;
+
+function updateCameraZoom() {
+    if (!camera || !controls || targetCameraDistance === null) return;
+
+    const offset = camera.position.clone().sub(controls.target);
+    const currentDist = offset.length();
+
+    if (Math.abs(currentDist - targetCameraDistance) < 0.05) {
+        offset.setLength(targetCameraDistance);
+        camera.position.copy(controls.target).add(offset);
+        targetCameraDistance = null;
+    } else {
+        const newDist = THREE.MathUtils.lerp(currentDist, targetCameraDistance, 0.12);
+        offset.setLength(newDist);
+        camera.position.copy(controls.target).add(offset);
+    }
+}
 
 if (btnZoomIn) {
-    btnZoomIn.addEventListener('click', () => {
-        if (!camera) return;
-        const currentPos = targetCameraPos ? targetCameraPos.clone() : camera.position.clone();
-        const targetPos = controls ? controls.target.clone() : new THREE.Vector3(0, -0.4, 0);
-        const dir = new THREE.Vector3().subVectors(targetPos, currentPos).normalize();
-        const dist = currentPos.distanceTo(targetPos);
-        if (dist > 8.0) {
-            targetCameraPos = currentPos.clone().addScaledVector(dir, 6.0);
-        }
+    btnZoomIn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        if (!camera || !controls) return;
+        const currentDist = camera.position.distanceTo(controls.target);
+        const baseDist = (targetCameraDistance !== null) ? targetCameraDistance : currentDist;
+        targetCameraDistance = Math.max(9.0, baseDist - 4.5);
     });
 }
 
 if (btnZoomOut) {
-    btnZoomOut.addEventListener('click', () => {
-        if (!camera) return;
-        const currentPos = targetCameraPos ? targetCameraPos.clone() : camera.position.clone();
-        const targetPos = controls ? controls.target.clone() : new THREE.Vector3(0, -0.4, 0);
-        const dir = new THREE.Vector3().subVectors(currentPos, targetPos).normalize();
-        const dist = currentPos.distanceTo(targetPos);
-        if (dist < 55.0) {
-            targetCameraPos = currentPos.clone().addScaledVector(dir, 6.0);
-        }
+    btnZoomOut.addEventListener('click', (e) => {
+        e.stopPropagation();
+        if (!camera || !controls) return;
+        const currentDist = camera.position.distanceTo(controls.target);
+        const baseDist = (targetCameraDistance !== null) ? targetCameraDistance : currentDist;
+        targetCameraDistance = Math.min(46.0, baseDist + 4.5);
     });
 }
 
@@ -1409,6 +2027,7 @@ function renderLoop(timestamp) {
     if (!state.animating) {
         animateFluidWaves(timeSec, 0);
         updateCathodicParticleFlux(0, 0, false);
+        updateCameraZoom();
         controls.update();
         renderer.render(scene, camera);
         requestAnimationFrame(renderLoop);
@@ -1421,8 +2040,15 @@ function renderLoop(timestamp) {
     }
 
     let elapsed = timestamp - state.startTime;
+    let cycleIndex = Math.floor(elapsed / state.duration);
     let p = (elapsed % state.duration) / state.duration;
     state.progress = p;
+
+    // Strict Sequence Flow: Door -> Random 1 -> Random 2 -> Door
+    const targetKey = CARRIER_SEQUENCE[cycleIndex % CARRIER_SEQUENCE.length];
+    if (activeCarrierKey !== targetKey) {
+        switchActiveCarrierItem(targetKey);
+    }
 
     updateTimelineHighlight(p);
 
@@ -1496,37 +2122,34 @@ function renderLoop(timestamp) {
     }
     if (clampMesh) clampMesh.position.set(currentX, currentY + 0.8, 0);
 
-    // REALTIME WATERLINE CLIPPING KINEMATICS
+    // REALTIME WATERLINE CLIPPING KINEMATICS FOR ACTIVE CARRIER ITEM
     // clippingPlaneAbove cuts off everything BELOW POOL_SURFACE_Y (keeps part ABOVE pool)
     // clippingPlaneBelow cuts off everything ABOVE POOL_SURFACE_Y (keeps part BELOW pool)
-    if (p < 0.40) {
-        // Stage 1: Entry -> 100% Raw Steel Gray, Coated Paint completely hidden
-        if (rawSteelDoorMesh) rawSteelDoorMesh.visible = true;
-        if (coatedDoorMesh) coatedDoorMesh.visible = false;
-        applyClippingPlanes(rawSteelDoorMesh, []);
-    } else if (p < 0.65) {
-        // Stage 2: Submerged inside Dip Tank -> Waterline Clipping Split
-        if (rawSteelDoorMesh) rawSteelDoorMesh.visible = true;
-        if (coatedDoorMesh) coatedDoorMesh.visible = true;
-        applyClippingPlanes(rawSteelDoorMesh, [clippingPlaneAbove]);
-        applyClippingPlanes(coatedDoorMesh, [clippingPlaneBelow]);
-    } else {
-        // Stage 3: Post-dip emergence -> 100% Royal Blue Glossy ED Paint Coated
-        if (rawSteelDoorMesh) rawSteelDoorMesh.visible = false;
-        if (coatedDoorMesh) coatedDoorMesh.visible = true;
-        applyClippingPlanes(coatedDoorMesh, []);
+    const activeItem = carrierItems[activeCarrierKey];
+    if (activeItem) {
+        if (p < 0.40) {
+            // Stage 1: Entry -> 100% Raw Steel Gray, Coated Paint completely hidden
+            if (activeItem.rawMesh) activeItem.rawMesh.visible = true;
+            if (activeItem.coatedMesh) activeItem.coatedMesh.visible = false;
+            applyClippingPlanes(activeItem.rawMesh, []);
+        } else if (p < 0.65) {
+            // Stage 2: Submerged inside Dip Tank -> Waterline Clipping Split
+            if (activeItem.rawMesh) activeItem.rawMesh.visible = true;
+            if (activeItem.coatedMesh) activeItem.coatedMesh.visible = true;
+            applyClippingPlanes(activeItem.rawMesh, [clippingPlaneAbove]);
+            applyClippingPlanes(activeItem.coatedMesh, [clippingPlaneBelow]);
+        } else {
+            // Stage 3: Post-dip emergence -> 100% Royal Blue Glossy ED Paint Coated
+            if (activeItem.rawMesh) activeItem.rawMesh.visible = false;
+            if (activeItem.coatedMesh) activeItem.coatedMesh.visible = true;
+            applyClippingPlanes(activeItem.coatedMesh, []);
+        }
     }
 
     animateFluidWaves(timeSec, S);
 
-    // Ultra-Smooth Camera Lerp Zoom Interpolation
-    if (targetCameraPos) {
-        camera.position.lerp(targetCameraPos, 0.08);
-        if (camera.position.distanceTo(targetCameraPos) < 0.05) {
-            camera.position.copy(targetCameraPos);
-            targetCameraPos = null;
-        }
-    }
+    // Ultra-Smooth Orbit-Safe Camera Distance Zoom Interpolation
+    updateCameraZoom();
 
     controls.update();
     renderer.render(scene, camera);
