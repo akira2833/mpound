@@ -184,13 +184,17 @@ let clippingPlaneAbove, clippingPlaneBelow;
 let keySpotLight, rimSpotLight;
 let factoryBackgroundGroup;
 
-// 4-Stage Electro-Coating Sequence: Door -> Random 1 -> Random 2 -> Door
-const CANDIDATE_ITEMS = ['heart', 'teddy', 'chair', 'toyCar'];
-const shuffledCandidates = [...CANDIDATE_ITEMS].sort(() => Math.random() - 0.5);
-const CARRIER_SEQUENCE = ['door', shuffledCandidates[0], shuffledCandidates[1], 'door'];
-let activeCarrierKey = 'door';
+// 4-Stage Pure GLTF 3D Models Electro-Coating Sequence
+const GLB_CONFIGS = [
+    { key: 'carConcept', file: 'CarConcept.glb', name: 'CONCEPT CAR', targetScale: 4.2 },
+    { key: 'damagedHelmet', file: 'DamagedHelmet.glb', name: 'BATTLE HELMET', targetScale: 3.5 },
+    { key: 'diffusePlant', file: 'DiffuseTransmissionPlant.glb', name: 'BOTANICAL PLANT', targetScale: 3.6 },
+    { key: 'chronographWatch', file: 'ChronographWatch.glb', name: 'CHRONOGRAPH WATCH', targetScale: 3.8 }
+];
+const CARRIER_SEQUENCE = GLB_CONFIGS.map(cfg => cfg.key);
+let activeCarrierKey = CARRIER_SEQUENCE[0];
 let carrierItems = {};
-console.log('Automotive Electro-Deposition Dynamic Carrier Sequence:', CARRIER_SEQUENCE);
+console.log('Automotive Electro-Deposition Pure GLTF Sequence:', CARRIER_SEQUENCE);
 
 // Strategy B Extras: Electro-Magic Particle Flux & Live Telemetry HUD
 let sparkLinesGroup, shockwaveRipples = [], holoCalloutGroup, cathodicParticleGroup;
@@ -1606,138 +1610,97 @@ function build3DCarDoorAssembly() {
     }
 
     // =========================================================
-    // BUILD ALL 5 CARRIER OBJECTS (Door + 4 Random Candidates)
+    // BUILD 4 PURE GLTF CARRIER OBJECTS ONLY
     // =========================================================
-    // 1. Car Door
-    rawSteelDoorMesh = buildProceduralDoor(globalRawSteelMat);
-    coatedDoorMesh = buildProceduralDoor(globalCoatedPaintMat);
-    const doorHolder = new THREE.Group();
-    doorHolder.add(rawSteelDoorMesh);
-    doorHolder.add(coatedDoorMesh);
-    doorGroup.add(doorHolder);
-    carrierItems.door = { group: doorHolder, rawMesh: rawSteelDoorMesh, coatedMesh: coatedDoorMesh, name: 'AUTO CAR DOOR' };
+    const gltfLoader = (typeof THREE.GLTFLoader !== 'undefined') ? new THREE.GLTFLoader() : null;
 
-    // 2. Heart 💖 (50% Scaled)
-    const heartRaw = buildProceduralHeart(globalRawSteelMat);
-    const heartCoated = buildProceduralHeart(globalCoatedPaintMat);
-    const heartHolder = new THREE.Group();
-    heartHolder.add(heartRaw);
-    heartHolder.add(heartCoated);
-    heartHolder.position.y = 0.25;
-    heartHolder.visible = false;
-    doorGroup.add(heartHolder);
-    carrierItems.heart = { group: heartHolder, rawMesh: heartRaw, coatedMesh: heartCoated, name: 'METALLIC HEART' };
+    GLB_CONFIGS.forEach((cfg, index) => {
+        const holder = new THREE.Group();
+        holder.visible = (index === 0);
+        doorGroup.add(holder);
 
-    // 3. Teddy Bear 🧸 (50% Scaled)
-    const teddyRaw = buildProceduralTeddy(globalRawSteelMat);
-    const teddyCoated = buildProceduralTeddy(globalCoatedPaintMat);
-    const teddyHolder = new THREE.Group();
-    teddyHolder.add(teddyRaw);
-    teddyHolder.add(teddyCoated);
-    teddyHolder.position.y = 0.35;
-    teddyHolder.visible = false;
-    doorGroup.add(teddyHolder);
-    carrierItems.teddy = { group: teddyHolder, rawMesh: teddyRaw, coatedMesh: teddyCoated, name: 'PRECISION TEDDY' };
+        carrierItems[cfg.key] = {
+            group: holder,
+            rawMesh: null,
+            coatedMesh: null,
+            name: cfg.name
+        };
 
-    // 4. Modern Chair 🪑 (50% Scaled)
-    const chairRaw = buildProceduralChair(globalRawSteelMat);
-    const chairCoated = buildProceduralChair(globalCoatedPaintMat);
-    const chairHolder = new THREE.Group();
-    chairHolder.add(chairRaw);
-    chairHolder.add(chairCoated);
-    chairHolder.position.y = 0.15;
-    chairHolder.visible = false;
-    doorGroup.add(chairHolder);
-    carrierItems.chair = { group: chairHolder, rawMesh: chairRaw, coatedMesh: chairCoated, name: 'MODERN CHAIR' };
+        if (gltfLoader) {
+            gltfLoader.load(
+                './assets/sketchup_car_door/' + cfg.file,
+                function (gltf) {
+                    try {
+                        const modelScene = gltf.scene || gltf.scenes[0];
 
-    // 5. Toy Car 🚙 (50% Scaled)
-    const toyCarRaw = buildProceduralToyCar(globalRawSteelMat);
-    const toyCarCoated = buildProceduralToyCar(globalCoatedPaintMat);
-    const toyCarHolder = new THREE.Group();
-    toyCarHolder.add(toyCarRaw);
-    toyCarHolder.add(toyCarCoated);
-    toyCarHolder.position.y = 0.32;
-    toyCarHolder.visible = false;
-    doorGroup.add(toyCarHolder);
-    carrierItems.toyCar = { group: toyCarHolder, rawMesh: toyCarRaw, coatedMesh: toyCarCoated, name: 'MINI TOY CAR' };
+                        // Compute Bounding Box to center and normalize scale
+                        const box = new THREE.Box3().setFromObject(modelScene);
+                        const size = box.getSize(new THREE.Vector3());
+                        const center = box.getCenter(new THREE.Vector3());
 
-    // Set initial active item
+                        // Center model at local origin (0, 0, 0)
+                        modelScene.position.set(-center.x, -center.y, -center.z);
+
+                        const wrapperGroup = new THREE.Group();
+                        wrapperGroup.add(modelScene);
+
+                        const maxDim = Math.max(size.x, size.y, size.z);
+                        const targetScale = cfg.targetScale || 3.8;
+                        if (maxDim > 0) {
+                            const scaleFactor = targetScale / maxDim;
+                            wrapperGroup.scale.set(scaleFactor, scaleFactor, scaleFactor);
+                        }
+
+                        // Stage 1: Raw Steel Gray
+                        const rawGroup = wrapperGroup.clone(true);
+                        rawGroup.traverse((child) => {
+                            if (child && child.isMesh) {
+                                child.material = globalRawSteelMat.clone();
+                                child.castShadow = true;
+                                child.receiveShadow = true;
+                            }
+                        });
+
+                        // Stage 3: High-Gloss ED Royal Blue Paint
+                        const coatedGroup = wrapperGroup.clone(true);
+                        coatedGroup.traverse((child) => {
+                            if (child && child.isMesh) {
+                                child.material = globalCoatedPaintMat.clone();
+                                child.castShadow = true;
+                                child.receiveShadow = true;
+                            }
+                        });
+
+                        holder.add(rawGroup);
+                        holder.add(coatedGroup);
+
+                        carrierItems[cfg.key].rawMesh = rawGroup;
+                        carrierItems[cfg.key].coatedMesh = coatedGroup;
+
+                        if (cfg.key === activeCarrierKey) {
+                            switchActiveCarrierItem(cfg.key);
+                            if (typeof createRealModelParticleDoor === 'function') {
+                                createRealModelParticleDoor(wrapperGroup);
+                            }
+                        }
+
+                        console.log(`[GLTF Loaded Successfully] ${cfg.file} (${cfg.name})`);
+                    } catch (err) {
+                        console.error(`Error processing GLTF ${cfg.file}:`, err);
+                    }
+                },
+                undefined,
+                function (err) {
+                    console.error(`Failed to load GLTF ${cfg.file}:`, err);
+                }
+            );
+        }
+    });
+
+    // Initialize first active item in sequence
     switchActiveCarrierItem(CARRIER_SEQUENCE[0]);
 
-    // =========================================================
-    // LOAD REAL 3D COLLADA MODEL (.dae) FROM FILE (Optional Upgrade)
-    // =========================================================
-    if (typeof THREE.ColladaLoader !== 'undefined') {
-        const loader = new THREE.ColladaLoader();
-        loader.load(
-            './assets/sketchup_car_door/model.dae',
-            function (collada) {
-                try {
-                    const sketchupScene = collada.scene;
-                    sketchupScene.scale.set(0.048, 0.048, 0.048);
-                    sketchupScene.rotation.x = -Math.PI / 2;
-
-                    const box = new THREE.Box3().setFromObject(sketchupScene);
-                    const center = box.getCenter(new THREE.Vector3());
-                    sketchupScene.position.set(-center.x, -center.y, -center.z);
-
-                    const wrapperGroup = new THREE.Group();
-                    wrapperGroup.add(sketchupScene);
-
-                    const rawGroup = wrapperGroup.clone(true);
-                    rawGroup.traverse((child) => {
-                        if (child && child.isMesh) {
-                            child.material = globalRawSteelMat.clone();
-                            child.castShadow = true;
-                            child.receiveShadow = true;
-                        }
-                    });
-
-                    const coatedGroup = wrapperGroup.clone(true);
-                    coatedGroup.traverse((child) => {
-                        if (child && child.isMesh) {
-                            child.material = globalCoatedPaintMat.clone();
-                            child.castShadow = true;
-                            child.receiveShadow = true;
-                        }
-                    });
-
-                    doorHolder.remove(rawSteelDoorMesh);
-                    doorHolder.remove(coatedDoorMesh);
-
-                    rawSteelDoorMesh = rawGroup;
-                    coatedDoorMesh = coatedGroup;
-
-                    doorHolder.add(rawSteelDoorMesh);
-                    doorHolder.add(coatedDoorMesh);
-
-                    carrierItems.door.rawMesh = rawSteelDoorMesh;
-                    carrierItems.door.coatedMesh = coatedDoorMesh;
-
-                    console.log('Successfully loaded 3D DAE car door model');
-                } catch (e) {
-                    console.warn('Error processing loaded DAE model, keeping 3D procedural door:', e);
-                }
-            },
-            undefined,
-            function (error) {
-                console.warn('Collada DAE load skipped/failed. Using high-quality 3D procedural car door model instead.', error);
-            }
-        );
-    }
-
-    // DIAGONAL HYDRAULIC TILTING PISTON ARMS ATTACHED TO RIG
-    const pistonGeo = new THREE.CylinderGeometry(0.08, 0.08, 2.2, 16);
-    
-    const leftPiston = new THREE.Mesh(pistonGeo, hydraulicMat);
-    leftPiston.position.set(-0.8, 1.8, 0);
-    leftPiston.rotation.z = Math.PI / 12;
-    doorGroup.add(leftPiston);
-
-    const rightPiston = new THREE.Mesh(pistonGeo, hydraulicMat);
-    rightPiston.position.set(0.8, 1.8, 0);
-    rightPiston.rotation.z = -Math.PI / 12;
-    doorGroup.add(rightPiston);
+    // (Diagonal hydraulic tilting piston arms removed as requested)
 
     scene.add(doorGroup);
 }
