@@ -3,54 +3,72 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HANTAL 3D Automotive Electro-Deposition</title>
-    <!-- Google Fonts: Inter Thin 100, Medium 500, Bold 700 & JetBrains Mono -->
+    <title>HANTAL 3D Automotive Electro-Deposition & Smart Factory</title>
+    <!-- Google Fonts: Inter & JetBrains Mono -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,500&family=JetBrains+Mono:wght@400;500;700;800&display=swap" rel="stylesheet">
-    <!-- Preload Klim Type Foundry - Söhne & Söhne Mono WebFonts -->
-    <link rel="preload" href="fonts/soehne-buch.woff2" as="font" type="font/woff2" crossorigin>
-    <link rel="preload" href="fonts/soehne-halbfett.woff2" as="font" type="font/woff2" crossorigin>
-    <link rel="preload" href="fonts/soehne-mono-buch.woff2" as="font" type="font/woff2" crossorigin>
-    <!-- Preload Commercial Type - Graphik WebFonts -->
-    <link rel="preload" href="fonts/GraphikLight.woff" as="font" type="font/woff" crossorigin>
-    <link rel="preload" href="fonts/GraphikBold.woff" as="font" type="font/woff" crossorigin>
-    <!-- Three.js, OrbitControls, ColladaLoader & GLTFLoader CDN -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/ColladaLoader.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
-    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <script type="module" crossorigin src="./assets/index-kkBklmSd.js"></script>
+  <link rel="stylesheet" crossorigin href="./assets/index-Di3G8Qo5.css">
 </head>
 <body>
+    <!-- ==========================================================================
+         SECURITY ACCESS GATE (PASSWORD: 1102)
+         ========================================================================== -->
+    <div id="auth-gate-overlay" class="auth-gate-overlay">
+        <div class="auth-gate-card">
+            <div class="auth-gate-header">
+                <img src="./hantal-logo-white.png" alt="HANTAL" class="auth-logo">
+                <div class="auth-badge">RESTRICTED ACCESS</div>
+            </div>
+            <h1 class="auth-title">HANTAL 3D Automotive<br>Smart Factory System</h1>
+            <p class="auth-desc">본 페이지는 인가된 관계자 전용 시연 사이트입니다.<br>접근 권한 비밀번호를 입력해주세요.</p>
+            
+            <form id="auth-form" class="auth-form" autocomplete="off">
+                <div class="auth-input-wrapper">
+                    <input type="password" id="auth-password-input" class="auth-input" placeholder="비밀번호 4자리" maxlength="10" autofocus autocomplete="new-password">
+                    <button type="submit" id="btn-auth-submit" class="auth-submit-btn">
+                        <span>입장하기</span>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                    </button>
+                </div>
+                <div id="auth-error-msg" class="auth-error-msg"></div>
+            </form>
+
+            <div class="auth-footer-note">
+                <span>HANTAL Global Technology Co., Ltd.</span>
+                <span>•</span>
+                <span>Confidential</span>
+            </div>
+        </div>
+    </div>
+
     <div class="main-scroll-container">
-        <!-- Site Global Header (HANTAL Brand Navigation) -->
+        <!-- ==========================================================================
+             SITE GLOBAL HEADER
+             ========================================================================== -->
         <header class="site-global-header">
             <div class="header-inner">
-                <a href="/" class="header-logo-link" aria-label="HANTAL Home">
-                    <img src="hantal-logo-white.png" alt="HANTAL" class="header-brand-logo">
+                <a href="#start" class="header-logo-link" aria-label="HANTAL Home">
+                    <img src="./hantal-logo-white.png" alt="HANTAL" class="header-brand-logo">
                 </a>
+
                 <nav class="header-nav-menu">
-                    <a href="#about" class="nav-item">About us</a>
+                    <a href="#features" class="nav-item">Features</a>
+                    <a href="#security" class="nav-item">Quality & Specs</a>
+                    <a href="#manifesto" class="nav-item">Manifesto</a>
                     <a href="#services" class="nav-item">Services</a>
-                    <a href="#network" class="nav-item">Network</a>
-                    <a href="#news" class="nav-item">News</a>
                     <a href="#careers" class="nav-item">Careers</a>
                 </nav>
+
                 <div class="header-actions">
-                    <button type="button" class="btn-lang-globe" aria-label="Language Selector">
-                        <svg viewBox="0 0 24 24" fill="none" class="globe-icon" aria-hidden="true">
-                            <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.8"></circle>
-                            <path d="M3 12h18M12 3c2.5 2.5 3.8 5.7 3.8 9s-1.3 6.5-3.8 9c-2.5-2.5-3.8-5.7-3.8-9S9.5 5.5 12 3z" stroke="currentColor" stroke-width="1.8"></path>
-                        </svg>
-                    </button>
                     <a href="#contact" class="nav-contact-link">Contact <span class="arrow">→</span></a>
                 </div>
             </div>
         </header>
 
         <!-- ==========================================================================
-             SECTION 1: HERO VIEWPORT & ARCHITECTURAL SPLIT TITLE
+             SECTION 1: HERO VIEWPORT (REAL HANTAL 3D CONVEYOR DIP SIMULATION)
              ========================================================================== -->
         <section class="hero-section" id="start">
             <!-- Three.js 3D Viewport Area -->
@@ -68,56 +86,81 @@
 
             <!-- Subtitle Statement (Left aligned in 3D Viewport) -->
             <div class="hero-editorial-statement-container">
+                <div class="hero-process-badge">
+                    <span>HANTAL_Web_3D_01</span>
+                    <span>•</span>
+                    <span>47 DOORS IMMERSION KINEMATICS</span>
+                </div>
                 <h2 class="hero-editorial-statement">
                     <span>Transforming how industries experience</span>
                     <span>electro-coating with <b>HANTAL</b> advanced</span>
                     <span>automotive electro-deposition systems.</span>
                 </h2>
                 <p class="hero-editorial-subcaption">
-                    Precision cathodic electro-deposition engineering for global mobility standards.
+                    정밀 전착도장 컨베이어 라인: 47개 차량 문짝이 레일을 따라 중앙 4.8m 깊은 수조(Dip Tank)에 침지 코팅된 후 무한 순환합니다.
                 </p>
             </div>
 
-            <!-- Bottom Right Controls: 3D Camera Zoom In / Zoom Out -->
-            <div class="editorial-controls-bottom">
-                <button class="minimal-btn" id="btnZoomIn">ZOOM IN +</button>
-                <button class="minimal-btn" id="btnZoomOut">ZOOM OUT −</button>
+            <!-- Quick 3D Process Floating Tools (Top-Right) -->
+            <div class="hero-quick-tools">
+                <div class="quick-tool-row">
+                    <span>MODEL</span>
+                    <select id="select-model" class="quick-select" style="background:#111827; color:#38bdf8; border:1px solid #0284c7; border-radius:4px; font-size:11px; font-weight:600; padding:2px 6px; cursor:pointer;">
+                        <option value="model02" selected>02+Spline (신규 궤적)</option>
+                        <option value="model01">01 Loop (기존)</option>
+                    </select>
+                </div>
+                <div class="quick-tool-row">
+                    <span>CONVEYOR</span>
+                    <button class="minimal-btn active" id="btn-toggle-play" style="padding:4px 8px;">PAUSE</button>
+                </div>
+                <div class="quick-tool-row">
+                    <span>SPEED</span>
+                    <input type="range" id="conveyor-speed-slider" min="0.02" max="1.0" step="0.02" value="0.02" class="quick-slider" />
+                </div>
+                <div class="quick-tool-row">
+                    <span>FOLLOW CAM</span>
+                    <button class="minimal-btn" id="btn-follow-toggle" style="padding:4px 8px;">OFF</button>
+                </div>
+                <div class="view-btn-row">
+                    <button class="btn-mini-view active" data-view="isometric">ISO</button>
+                    <button class="btn-mini-view" data-view="front">FRONT</button>
+                    <button class="btn-mini-view" data-view="top">TOP</button>
+                    <button class="btn-mini-view" data-view="side">SIDE</button>
+                </div>
             </div>
 
-            <!-- Minimalist Center Line Timeline -->
+            <!-- Center Line Timeline: Synced in Realtime with Dipping Process! -->
             <nav class="center-line-timeline">
-                <div class="timeline-thin-line"></div>
                 <div class="timeline-nodes-inline">
                     <div class="inline-node active" id="stepNode1">
-                        <span class="dot-indicator">●</span>
-                        <span class="node-label-text">ALIGN</span>
+                        <span class="dot-indicator"></span>
+                        <span class="node-label-text">ENTRY ALIGN</span>
                     </div>
                     <div class="inline-node" id="stepNode2">
-                        <span class="dot-indicator">●</span>
-                        <span class="node-label-text">CHECK</span>
+                        <span class="dot-indicator"></span>
+                        <span class="node-label-text">TRACK CHECK</span>
                     </div>
                     <div class="inline-node" id="stepNode3">
-                        <span class="dot-indicator">●</span>
-                        <span class="node-label-text">PASS</span>
+                        <span class="dot-indicator"></span>
+                        <span class="node-label-text">4.8M DIP TANK</span>
                     </div>
                     <div class="inline-node" id="stepNode4">
-                        <span class="dot-indicator">●</span>
-                        <span class="node-label-text">DENSITY</span>
+                        <span class="dot-indicator"></span>
+                        <span class="node-label-text">COATING PASS</span>
                     </div>
                     <div class="inline-node" id="stepNode5">
-                        <span class="dot-indicator">●</span>
-                        <span class="node-label-text">COMPLETE</span>
+                        <span class="dot-indicator"></span>
+                        <span class="node-label-text">LOOP RETURN</span>
                     </div>
                 </div>
             </nav>
 
-            <!-- HANTAL Logo Splash Screen -->
-            <div id="centerPlayOverlay" class="splash-overlay">
-                <div class="splash-logo-container">
-                    <div class="splash-logo-text">HANTAL</div>
-                    <div class="splash-sub-text">ELECTRO-DEPOSITION COATING</div>
-                    <div class="splash-line"></div>
-                </div>
+            <!-- Bottom Right Controls: 3D Camera Zoom In / Zoom Out -->
+            <div class="editorial-controls-bottom">
+                <button class="minimal-btn" id="btnZoomIn">ZOOM IN +</button>
+                <button class="minimal-btn" id="btnZoomOut">ZOOM OUT -</button>
+                <button class="minimal-btn" id="btnResetCam">RESET VIEW</button>
             </div>
 
             <!-- Saw-Tooth Geometric Teeth Divider -->
@@ -143,17 +186,19 @@
             <div class="horizontal-cards-track">
                 <!-- Card 1 -->
                 <div class="horizontal-card">
-                    <header class="card-header-title">Device-based Cathodic Control</header>
+                    <header class="card-header-title">Cathodic Voltage Uniformity</header>
                     <div class="card-media-box">
-                        <div class="card-badge">[VERIFIED]</div>
-                        <div class="card-icon-svg">⚡</div>
+                        <div class="orbit-tags">
+                            <span>[VERIFIED]</span>
+                            <span>±0.02V DENSITY</span>
+                        </div>
                     </div>
-                    <p class="card-description-text">Give production lines a method of coating they already trust–such as cathodic voltage regulation–and provide a more polished finish.</p>
+                    <p class="card-description-text">Give production lines a method of coating they already trust—such as cathodic voltage regulation—and provide a more polished finish.</p>
                 </div>
 
                 <!-- Card 2 -->
                 <div class="horizontal-card">
-                    <header class="card-header-title">Deep Tank Submersion</header>
+                    <header class="card-header-title">Deep Tank 4.8m Submersion</header>
                     <div class="card-media-box">
                         <div class="orbit-tags">
                             <span>4.8m DIP</span>
@@ -167,10 +212,9 @@
                 <div class="horizontal-card">
                     <header class="card-header-title">High-Gloss Anti-Corrosion</header>
                     <div class="card-media-box">
-                        <div class="cubes-row">
-                            <div class="c-box"></div>
-                            <div class="c-box"></div>
-                            <div class="c-box"></div>
+                        <div class="orbit-tags">
+                            <span>SALT-SPRAY 1500h</span>
+                            <span>GRADE A</span>
                         </div>
                     </div>
                     <p class="card-description-text">Ensure structural metal safety through electro-coat barrier with features such as salt-spray resistance, while maintaining high-gloss finish.</p>
@@ -178,11 +222,14 @@
 
                 <!-- Card 4 -->
                 <div class="horizontal-card">
-                    <header class="card-header-title">Developer-Friendly Integration</header>
+                    <header class="card-header-title">5-User Realtime Collaboration</header>
                     <div class="card-media-box">
-                        <div class="code-pill">npx hantal-coat --stage 3d-loop</div>
+                        <div class="orbit-tags">
+                            <span>WEBSOCKET</span>
+                            <span>3D PING</span>
+                        </div>
                     </div>
-                    <p class="card-description-text">Include the smart 3D conveyor kinematics easily in your factory stack for simple, drop-in automated dipping loop.</p>
+                    <p class="card-description-text">Include smart 3D conveyor kinematics easily in your team workflow with Cloudflare Tunnel & live multi-engineer sessions.</p>
                 </div>
             </div>
         </section>
@@ -204,7 +251,7 @@
                     <div class="accordion-header">
                         <span class="item-num">[ 01 ]</span>
                         <h3 class="item-title">Cathodic Voltage Uniformity</h3>
-                        <span class="item-arrow">▲</span>
+                        <span class="item-arrow">+</span>
                     </div>
                     <div class="accordion-content">
                         <p>With HANTAL Cathodic Control, voltage density is evenly distributed across every millimeter of raw steel, eliminating thin spots or coating defects.</p>
@@ -216,7 +263,7 @@
                     <div class="accordion-header">
                         <span class="item-num">[ 02 ]</span>
                         <h3 class="item-title">Zero Uncoated Cavities</h3>
-                        <span class="item-arrow">▼</span>
+                        <span class="item-arrow">+</span>
                     </div>
                     <div class="accordion-content">
                         <p>100% fluid submersion guarantees that interior hollow door panels, window frames, and hidden crevices receive full electro-deposition paint coverage.</p>
@@ -228,7 +275,7 @@
                     <div class="accordion-header">
                         <span class="item-num">[ 03 ]</span>
                         <h3 class="item-title">Automated Conveyor Kinematics</h3>
-                        <span class="item-arrow">▼</span>
+                        <span class="item-arrow">+</span>
                     </div>
                     <div class="accordion-content">
                         <p>4-stage conveyor choreography controls slow entry, fast immersion, and smooth emergence at 2/3 screen position for optimal drip removal.</p>
@@ -240,7 +287,7 @@
                     <div class="accordion-header">
                         <span class="item-num">[ 04 ]</span>
                         <h3 class="item-title">Realtime Telemetry Scanning</h3>
-                        <span class="item-arrow">▼</span>
+                        <span class="item-arrow">+</span>
                     </div>
                     <div class="accordion-content">
                         <p>Continuous density scanning tracks coating progress from 94.1% to 100% complete pass in real time.</p>
@@ -263,11 +310,22 @@
             <!-- Bottom Footer -->
             <footer class="editorial-footer-bottom">
                 <span>© 2026 HANTAL AUTOMOTIVE LAB // ALL RIGHTS RESERVED</span>
-                <span>REFERENCING PASSKEYS.FOUNDATION SCROLL ENGINE</span>
+                <span>47 DOORS CONTINUOUS DIP & AUTOMOTIVE ELECTRO-DEPOSITION</span>
             </footer>
         </section>
     </div>
 
-    <script src="app.js"></script>
+    <!-- Loading Screen Overlay -->
+    <div id="loading-overlay" class="loading-overlay">
+        <div class="loading-card">
+            <div class="spinner-ring"></div>
+            <h2 id="loading-text" style="font-size:16px;font-weight:600;">HANTAL 3D 공정 로딩 중...</h2>
+            <div class="loading-bar-wrap">
+                <div class="loading-bar-fill" id="loading-bar-fill"></div>
+            </div>
+            <p class="loading-sub" id="loading-sub">HANTAL_Web_3D_01.gltf (47개 차량 문짝 & 수조 레일 로딩)</p>
+        </div>
+    </div>
+
 </body>
 </html>
