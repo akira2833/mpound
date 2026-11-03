@@ -8,8 +8,8 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
-  <script type="module" crossorigin src="./assets/index-BOtkW3nu.js"></script>
-  <link rel="stylesheet" crossorigin href="./assets/index-DDMu3RWD.css">
+  <script type="module" crossorigin src="./assets/index-CG64pQpe.js"></script>
+  <link rel="stylesheet" crossorigin href="./assets/index-CykaWHhc.css">
 </head>
 <body>
     <!-- ==========================================================================
@@ -82,116 +82,69 @@
                         <span class="hud-c bottom-right"></span>
                     </div>
                 </div>
+
+                <!-- Interactive Concentric Circle Hotspot Pins (main.jpg) -->
+                <div class="hotspot-overlay" id="hotspotOverlay">
+                    <button class="hotspot-pin" id="hotspot1" data-zone="upperrail" aria-label="01 상단 투입 레일">
+                        <span class="hotspot-ring-outer"></span>
+                        <span class="hotspot-ring-mid"></span>
+                        <span class="hotspot-dot"></span>
+                        <span class="hotspot-tag">01 UPPER RAIL</span>
+                    </button>
+                    <button class="hotspot-pin" id="hotspot2" data-zone="diptank" aria-label="02 중앙 수조 침지 뷰">
+                        <span class="hotspot-ring-outer"></span>
+                        <span class="hotspot-ring-mid"></span>
+                        <span class="hotspot-dot"></span>
+                        <span class="hotspot-tag">02 DIP TANK</span>
+                    </button>
+                    <button class="hotspot-pin" id="hotspot3" data-zone="chamber" aria-label="03 공정 챔버 도어 게이트">
+                        <span class="hotspot-ring-outer"></span>
+                        <span class="hotspot-ring-mid"></span>
+                        <span class="hotspot-dot"></span>
+                        <span class="hotspot-tag">03 CHAMBER GATE</span>
+                    </button>
+                </div>
             </div>
 
-            <!-- Subtitle Statement (Left aligned in 3D Viewport) -->
+            <!-- Editorial Heading (Left aligned in 3D Viewport matching main.jpg) -->
             <div class="hero-editorial-statement-container">
-                <div class="hero-process-badge">
-                    <span>HANTAL_Web_3D_01</span>
-                    <span>•</span>
-                    <span>47 DOORS IMMERSION KINEMATICS</span>
-                </div>
-                <h2 class="hero-editorial-statement">
-                    <span>Transforming how industries experience</span>
-                    <span>electro-coating with <b>HANTAL</b> advanced</span>
-                    <span>automotive electro-deposition systems.</span>
-                </h2>
-                <p class="hero-editorial-subcaption">
-                    정밀 전착도장 컨베이어 라인: 47개 차량 문짝이 레일을 따라 중앙 4.8m 깊은 수조(Dip Tank)에 침지 코팅된 후 무한 순환합니다.
-                </p>
+                <h1 class="hero-hero-title">
+                    <span class="title-bold">Electrodeposition</span>
+                    <span class="title-light">Coating Simulation</span>
+                </h1>
             </div>
 
-            <!-- Quick 3D Process Floating Tools (Top-Right) -->
-            <div class="hero-quick-tools">
-                <div class="quick-tool-row">
-                    <span>MODEL</span>
-                    <select id="select-model" class="quick-select" style="background:#111827; color:#38bdf8; border:1px solid #0284c7; border-radius:4px; font-size:11px; font-weight:600; padding:2px 6px; cursor:pointer;">
-                        <option value="model02" selected>02+Spline (신규 궤적)</option>
-                        <option value="model01">01 Loop (기존)</option>
-                    </select>
-                </div>
-                <div class="quick-tool-row">
-                    <span>CONVEYOR</span>
-                    <button class="minimal-btn active" id="btn-toggle-play" style="padding:4px 8px;">PAUSE</button>
-                </div>
-                <div class="quick-tool-row">
-                    <span>SPEED</span>
-                    <input type="range" id="conveyor-speed-slider" min="0.02" max="1.0" step="0.02" value="0.02" class="quick-slider" />
-                </div>
-                <div class="quick-tool-row">
-                    <span>FOLLOW CAM</span>
-                    <button class="minimal-btn" id="btn-follow-toggle" style="padding:4px 8px;">OFF</button>
-                </div>
-            </div>
-
-            <!-- Center Line Timeline: Synced in Realtime with Dipping Process! -->
-            <nav class="center-line-timeline">
+            <!-- Center Line Timeline: Synced in Realtime with Dipping Process (main.jpg) -->
+            <nav class="center-line-timeline" id="centerLineTimeline">
                 <div class="timeline-nodes-inline">
                     <div class="inline-node active" id="stepNode1">
-                        <span class="dot-indicator"></span>
+                        <span class="node-prefix">●</span>
                         <span class="node-label-text">ENTRY ALIGN</span>
                     </div>
                     <div class="inline-node" id="stepNode2">
-                        <span class="dot-indicator"></span>
+                        <span class="node-prefix">+</span>
                         <span class="node-label-text">TRACK CHECK</span>
                     </div>
                     <div class="inline-node" id="stepNode3">
-                        <span class="dot-indicator"></span>
+                        <span class="node-prefix">+</span>
                         <span class="node-label-text">4.8M DIP TANK</span>
                     </div>
                     <div class="inline-node" id="stepNode4">
-                        <span class="dot-indicator"></span>
+                        <span class="node-prefix">+</span>
                         <span class="node-label-text">COATING PASS</span>
                     </div>
                     <div class="inline-node" id="stepNode5">
-                        <span class="dot-indicator"></span>
+                        <span class="node-prefix">+</span>
                         <span class="node-label-text">LOOP RETURN</span>
                     </div>
                 </div>
             </nav>
 
-            <!-- Cyberpunk Sci-Fi Camera Focus Matrix Dock (사이버세상 1, 2, 3 포커싱 독) -->
-            <div class="cyber-camera-dock" id="cyberCameraDock">
-                <div class="cyber-dock-header">
-                    <div class="cyber-status-left">
-                        <span class="cyber-pulse-dot"></span>
-                        <span class="cyber-dock-title">TARGET SENSOR // CAMERA MATRIX</span>
-                    </div>
-                    <span class="cyber-status-pill" id="cyberStatusPill">CINEMATIC DOCKED</span>
-                </div>
-                <div class="cyber-buttons-grid">
-                    <button class="cyber-btn active" data-zone="1" id="btnCyberZone1">
-                        <span class="cyber-btn-index">01</span>
-                        <div class="cyber-btn-info">
-                            <span class="cyber-btn-label">DIP TANK</span>
-                            <span class="cyber-btn-desc">수조 상단 탑뷰</span>
-                        </div>
-                        <span class="cyber-corner-bracket"></span>
-                    </button>
-                    <button class="cyber-btn" data-zone="2" id="btnCyberZone2">
-                        <span class="cyber-btn-index">02</span>
-                        <div class="cyber-btn-info">
-                            <span class="cyber-btn-label">UPPER RAIL</span>
-                            <span class="cyber-btn-desc">상단 투입구</span>
-                        </div>
-                        <span class="cyber-corner-bracket"></span>
-                    </button>
-                    <button class="cyber-btn" data-zone="3" id="btnCyberZone3">
-                        <span class="cyber-btn-index">03</span>
-                        <div class="cyber-btn-info">
-                            <span class="cyber-btn-label">OVERVIEW</span>
-                            <span class="cyber-btn-desc">전체 공정 조감</span>
-                        </div>
-                        <span class="cyber-corner-bracket"></span>
-                    </button>
-                    <button class="cyber-btn cyber-btn-replay" id="btnCyberReplay" title="등장씬 1: 천천히 줌인되어 수조로 진입하는 씬 다시보기">
-                        <span class="cyber-replay-icon">⟲</span>
-                        <div class="cyber-btn-info">
-                            <span class="cyber-btn-label">INTRO ZOOM</span>
-                            <span class="cyber-btn-desc">등장씬 다시보기</span>
-                        </div>
-                    </button>
-                </div>
+            <!-- Minimal Bottom-Right Controls (ZOOM IN +, ZOOM OUT -, RESET VIEW) -->
+            <div class="editorial-controls-bottom">
+                <button class="minimal-btn" id="btnZoomIn" title="화면 확대">ZOOM IN +</button>
+                <button class="minimal-btn" id="btnZoomOut" title="화면 축소">ZOOM OUT -</button>
+                <button class="minimal-btn" id="btnResetView" title="기본 뷰 리셋">RESET VIEW</button>
             </div>
 
             <!-- Saw-Tooth Geometric Teeth Divider -->
