@@ -8,8 +8,8 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
-  <script type="module" crossorigin src="./assets/index-BG3Zp0UH.js"></script>
-  <link rel="stylesheet" crossorigin href="./assets/index-Di3G8Qo5.css">
+  <script type="module" crossorigin src="./assets/index-Dlqrbvk5.js"></script>
+  <link rel="stylesheet" crossorigin href="./assets/index-DDMu3RWD.css">
 </head>
 <body>
     <!-- ==========================================================================
@@ -122,12 +122,6 @@
                     <span>FOLLOW CAM</span>
                     <button class="minimal-btn" id="btn-follow-toggle" style="padding:4px 8px;">OFF</button>
                 </div>
-                <div class="view-btn-row">
-                    <button class="btn-mini-view active" data-view="isometric">ISO</button>
-                    <button class="btn-mini-view" data-view="front">FRONT</button>
-                    <button class="btn-mini-view" data-view="top">TOP</button>
-                    <button class="btn-mini-view" data-view="side">SIDE</button>
-                </div>
             </div>
 
             <!-- Center Line Timeline: Synced in Realtime with Dipping Process! -->
@@ -156,11 +150,48 @@
                 </div>
             </nav>
 
-            <!-- Bottom Right Controls: 3D Camera Zoom In / Zoom Out -->
-            <div class="editorial-controls-bottom">
-                <button class="minimal-btn" id="btnZoomIn">ZOOM IN +</button>
-                <button class="minimal-btn" id="btnZoomOut">ZOOM OUT -</button>
-                <button class="minimal-btn" id="btnResetCam">RESET VIEW</button>
+            <!-- Cyberpunk Sci-Fi Camera Focus Matrix Dock (사이버세상 1, 2, 3 포커싱 독) -->
+            <div class="cyber-camera-dock" id="cyberCameraDock">
+                <div class="cyber-dock-header">
+                    <div class="cyber-status-left">
+                        <span class="cyber-pulse-dot"></span>
+                        <span class="cyber-dock-title">TARGET SENSOR // CAMERA MATRIX</span>
+                    </div>
+                    <span class="cyber-status-pill" id="cyberStatusPill">CINEMATIC DOCKED</span>
+                </div>
+                <div class="cyber-buttons-grid">
+                    <button class="cyber-btn active" data-zone="1" id="btnCyberZone1">
+                        <span class="cyber-btn-index">01</span>
+                        <div class="cyber-btn-info">
+                            <span class="cyber-btn-label">DIP TANK</span>
+                            <span class="cyber-btn-desc">수조 침지 뷰</span>
+                        </div>
+                        <span class="cyber-corner-bracket"></span>
+                    </button>
+                    <button class="cyber-btn" data-zone="2" id="btnCyberZone2">
+                        <span class="cyber-btn-index">02</span>
+                        <div class="cyber-btn-info">
+                            <span class="cyber-btn-label">UPPER RAIL</span>
+                            <span class="cyber-btn-desc">상단 투입구</span>
+                        </div>
+                        <span class="cyber-corner-bracket"></span>
+                    </button>
+                    <button class="cyber-btn" data-zone="3" id="btnCyberZone3">
+                        <span class="cyber-btn-index">03</span>
+                        <div class="cyber-btn-info">
+                            <span class="cyber-btn-label">OVERVIEW</span>
+                            <span class="cyber-btn-desc">전체 공정 조감</span>
+                        </div>
+                        <span class="cyber-corner-bracket"></span>
+                    </button>
+                    <button class="cyber-btn cyber-btn-replay" id="btnCyberReplay" title="등장씬 1: 천천히 줌인되어 수조로 진입하는 씬 다시보기">
+                        <span class="cyber-replay-icon">⟲</span>
+                        <div class="cyber-btn-info">
+                            <span class="cyber-btn-label">INTRO ZOOM</span>
+                            <span class="cyber-btn-desc">등장씬 다시보기</span>
+                        </div>
+                    </button>
+                </div>
             </div>
 
             <!-- Saw-Tooth Geometric Teeth Divider -->
